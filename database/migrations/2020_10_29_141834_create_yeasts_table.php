@@ -12,7 +12,6 @@ class CreateYeastsTable extends Migration
     {
         Schema::create('yeasts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->enum('type',
                 ['Liquid', 'Dry', 'Slant', 'Culture']

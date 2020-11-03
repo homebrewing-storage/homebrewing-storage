@@ -17,7 +17,6 @@ class YeastsTableSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             Yeast::create([
-                'user_id' => $faker->randomDigit,
                 'name' => $faker->word,
                 'type' => $faker->randomElement(['Liquid', 'Dry', 'Slant', 'Culture']),
                 'amount' => $faker->randomDigit,

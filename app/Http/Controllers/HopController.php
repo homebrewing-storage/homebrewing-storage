@@ -4,56 +4,52 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Resources\HopResource;
 use App\Models\Hop;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class HopController extends Controller
 {
-    public function index()
+    public function index(): JsonResource
     {
-        return Hop::all();
+        return HopResource::collection(Hop::all());
     }
 
-    public function show($name)
+    public function store(Request $request): JsonResponse
     {
-        return Hop::where('name', '=', $name)->firstOrFail();
+        Hop::create($this->validateHopForm());
+        return response()->json($request, 201);
     }
 
-    public function store(Request $request)
+    public function show(Hop $hop): JsonResource
     {
-        $id = $request->get('id');
-        $name = $request->get('name');
+        return new HopResource($hop);
+    }
 
-        if($id)
-        {
-            $amountBase = $request->get('amount');
-
-            $findHop = Hop::findOrFail($id);
-            Hop::where('name', '=', $name)->firstOrFail();
-            $amountToAdd = $findHop->amount;
-
-            $amountNew = $amountBase + $amountToAdd;
-            $findHop->amount = $amountNew;
-            $findHop->save();
-
-            return response()->json($findHop, 200);
-        }
-
-        $hop = Hop::create($request->all());
+    public function update(Request $request, Hop $hop): JsonResponse
+    {
+        $validatedForm = $this->validateHopForm();
+        $hop->update($validatedForm);
 
         return response()->json($hop, 201);
     }
 
-    public function delete($id)
+    public function destroy(Hop $hop): JsonResponse
     {
-        $hop = Hop::findOrFail($id);
         $hop->delete();
 
         return response()->json(null, 204);
     }
 
-    public function all($userId)
+    protected function validateHopForm(): array
     {
-        return Hop::where('user_id', '=', $userId)->get();
+        return request()->validate([
+            'name' => 'required|min:3|max:255',
+            'alpha_acid' => 'required|min:1|max:3',
+            'amount' => 'required|min:1',
+            'expiration_date' => 'required|date'
+        ]);
     }
 }

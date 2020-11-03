@@ -4,56 +4,52 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Resources\YeastResource;
 use App\Models\Yeast;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class YeastController extends Controller
 {
-    public function index()
+    public function index(): JsonResource
     {
-        return Yeast::all();
+        return YeastResource::collection(Yeast::all());
     }
 
-    public function show($name)
+    public function store(Request $request): JsonResponse
     {
-        return Yeast::where('name', '=', $name)->firstOrFail();
+        Yeast::create($this->validateHopForm());
+        return response()->json($request, 201);
     }
 
-    public function store(Request $request)
+    public function show(Yeast $yeast): JsonResource
     {
-        $id = $request->get('id');
-        $name = $request->get('name');
-
-        if($id)
-        {
-            $amountBase = $request->get('amount');
-
-            $findHop = Yeast::findOrFail($id);
-            Yeast::where('name', '=', $name)->firstOrFail();
-            $amountToAdd = $findHop->amount;
-
-            $amountNew = $amountBase + $amountToAdd;
-            $findHop->amount = $amountNew;
-            $findHop->save();
-
-            return response()->json($findHop, 200);
-        }
-
-        $hop = Yeast::create($request->all());
-
-        return response()->json($hop, 201);
+        return new YeastResource($yeast);
     }
 
-    public function delete($id)
+    public function update(Request $request, Yeast $yeast): JsonResponse
     {
-        $hop = Yeast::findOrFail($id);
-        $hop->delete();
+        $validatedForm = $this->validateHopForm();
+        $yeast->update($validatedForm);
+
+        return response()->json($yeast, 201);
+    }
+
+    public function destroy(Yeast $yeast): JsonResponse
+    {
+        $yeast->delete();
 
         return response()->json(null, 204);
     }
 
-    public function all($userId)
+    protected function validateHopForm(): array
     {
-        return Yeast::where('user_id', '=', $userId)->get();
+        return request()->validate([
+            'name' => 'required|min:3|max:255',
+            'type' => 'required',
+            'amount' => 'required|min:1',
+            'expiration_date' => 'required|date'
+        ]);
     }
 }

@@ -4,57 +4,52 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Fermentable;
-use Illuminate\Http\Request;
+use App\Http\Resources\ExtraResource;
 use App\Models\Extra;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExtraController extends Controller
 {
-    public function index()
+    public function index(): JsonResource
     {
-        return Extra::all();
+        return ExtraResource::collection(Extra::all());
     }
 
-    public function show($name)
+    public function store(Request $request): JsonResponse
     {
-        return Extra::where('name', '=', $name)->firstOrFail();
+        Extra::create($this->validateHopForm());
+        return response()->json($request, 201);
     }
 
-    public function store(Request $request)
+    public function show(Extra $extra): JsonResource
     {
-        $id = $request->get('id');
-        $name = $request->get('name');
-
-        if($id)
-        {
-            $amountBase = $request->get('amount');
-
-            $findHop = Extra::findOrFail($id);
-            Extra::where('name', '=', $name)->firstOrFail();
-            $amountToAdd = $findHop->amount;
-
-            $amountNew = $amountBase + $amountToAdd;
-            $findHop->amount = $amountNew;
-            $findHop->save();
-
-            return response()->json($findHop, 200);
-        }
-
-        $hop = Extra::create($request->all());
-
-        return response()->json($hop, 201);
+        return new ExtraResource($extra);
     }
 
-    public function delete($id)
+    public function update(Request $request, Extra $extra): JsonResponse
     {
-        $hop = Extra::findOrFail($id);
-        $hop->delete();
+        $validatedForm = $this->validateHopForm();
+        $extra->update($validatedForm);
+
+        return response()->json($extra, 201);
+    }
+
+    public function destroy(Extra $extra): JsonResponse
+    {
+        $extra->delete();
 
         return response()->json(null, 204);
     }
 
-    public function all($userId)
+    protected function validateHopForm(): array
     {
-        return Fermentable::where('user_id', '=', $userId)->get();
+        return request()->validate([
+            'name' => 'required|min:3|max:255',
+            'type' => 'required|min:3|max:255',
+            'amount' => 'required|min:1',
+            'expiration_date' => 'required|date'
+        ]);
     }
 }

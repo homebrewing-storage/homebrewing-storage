@@ -15,7 +15,6 @@ class ExtrasTableSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             Extra::create([
-                'user_id' => $faker->randomDigit,
                 'name' => $faker->word,
                 'type' => $faker->word,
                 'amount' => $faker->randomDigit,

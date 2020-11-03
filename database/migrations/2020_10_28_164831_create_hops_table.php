@@ -12,7 +12,6 @@ class CreateHopsTable extends Migration
     {
         Schema::create('hops', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->integer('amount');
             $table->smallInteger('alpha_acid');

@@ -17,7 +17,6 @@ class FermentablesTableSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             Fermentable::create([
-                'user_id' => $faker->randomDigit,
                 'name' => $faker->word,
                 'type' => $faker->randomElement(['Grain', 'Sugar', 'Liquid extract', 'Dry extract', 'Adjunct']),
                 'yield' => $faker->randomDigit,

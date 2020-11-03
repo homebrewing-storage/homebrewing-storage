@@ -17,7 +17,6 @@ class HopsTableSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             Hop::create([
-                'user_id' => $faker->randomDigit,
                 'name' => $faker->word,
                 'amount' => $faker->randomDigit,
                 'alpha_acid' => $faker->randomDigit,

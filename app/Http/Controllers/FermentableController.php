@@ -4,56 +4,54 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Resources\FermentableResource;
 use App\Models\Fermentable;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class FermentableController extends Controller
 {
-    public function index()
+    public function index(): JsonResource
     {
-        return Fermentable::all();
+        return FermentableResource::collection(Fermentable::all());
     }
 
-    public function show($name)
+    public function store(Request $request): JsonResponse
     {
-        return Fermentable::where('name', '=', $name)->firstOrFail();
+        Fermentable::create($this->validateHopForm());
+        return response()->json($request, 201);
     }
 
-    public function store(Request $request)
+    public function show(Fermentable $fermentable): JsonResource
     {
-        $id = $request->get('id');
-        $name = $request->get('name');
-
-        if($id)
-        {
-            $amountBase = $request->get('amount');
-
-            $findHop = Fermentable::findOrFail($id);
-            Fermentable::where('name', '=', $name)->firstOrFail();
-            $amountToAdd = $findHop->amount;
-
-            $amountNew = $amountBase + $amountToAdd;
-            $findHop->amount = $amountNew;
-            $findHop->save();
-
-            return response()->json($findHop, 200);
-        }
-
-        $hop = Fermentable::create($request->all());
-
-        return response()->json($hop, 201);
+        return new FermentableResource($fermentable);
     }
 
-    public function delete($id)
+    public function update(Request $request, Fermentable $fermentable): JsonResponse
     {
-        $hop = Fermentable::findOrFail($id);
-        $hop->delete();
+        $validatedForm = $this->validateHopForm();
+        $fermentable->update($validatedForm);
+
+        return response()->json($fermentable, 201);
+    }
+
+    public function destroy(Fermentable $fermentable): JsonResponse
+    {
+        $fermentable->delete();
 
         return response()->json(null, 204);
     }
 
-    public function all($userId)
+    protected function validateHopForm(): array
     {
-        return Fermentable::where('user_id', '=', $userId)->get();
+        return request()->validate([
+            'name' => 'required|min:3|max:255',
+            'type' => 'required|min:3|max:255',
+            'yield' => 'required|min:1|max:255',
+            'ebc' => 'required|min:1|max:255',
+            'amount' => 'required|min:1',
+            'expiration_date' => 'required|date'
+        ]);
     }
 }
