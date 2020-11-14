@@ -12,7 +12,7 @@ class CreateExtrasTable extends Migration
     {
         Schema::create('extras', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->nullable();
             $table->string('name');
             $table->string('type');
             $table->integer('amount');

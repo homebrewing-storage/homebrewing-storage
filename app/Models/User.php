@@ -30,21 +30,21 @@ class User extends Authenticatable
     public function hops()
     {
         // SELECT * FROM 'hops' WHERE 'user_id' = *current_user*
-        return $this->hasMany('App\Models\Hop');
+        return $this->hasMany(Hop::class);
     }
 
-    public function yeasts()
+    public function yeasts(): HasMany
     {
-        return $this->hasMany('App\Models\Yeast');
+        return $this->hasMany(Yeast::class);
     }
 
-    public function extras()
+    public function extras(): hasMany
     {
-        return $this->hasMany('App\Models\Extra');
+        return $this->hasMany(Extra::class);
     }
 
-    public function fermentables()
+    public function fermentables(): hasMany
     {
-        return $this->hasMany('App\Models\fermentable');
+        return $this->hasMany(fermentable::class);
     }
 }

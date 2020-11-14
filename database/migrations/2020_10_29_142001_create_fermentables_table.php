@@ -12,7 +12,7 @@ class CreateFermentablesTable extends Migration
     {
         Schema::create('fermentables', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->nullable();
             $table->string('name');
             $table->enum('type',
                 ['Grain', 'Sugar', 'Liquid extract', 'Dry extract', 'Adjunct']

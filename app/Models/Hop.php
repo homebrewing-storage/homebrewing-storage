@@ -13,9 +13,9 @@ class Hop extends Model
 
     protected $fillable = ['name', 'amount', 'alpha_acid', 'expiration_date'];
 
-    public function user()
+    public function user(): belongsTo
     {
     	// reference users table
-    	return $this->belongsTo('App\Models\User');
+    	return $this->belongsTo(User::class);
     }
 }

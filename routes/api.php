@@ -18,24 +18,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('hops', [HopController::class, 'index']);
 Route::get('hops/{hop}', [HopController::class, 'show']);
 Route::post('hops', [HopController::class, 'store']);
-Route::post('hops/{hop}', [HopController::class, 'update']);
+Route::put('hops/{hop}', [HopController::class, 'update']);
 Route::delete('hops/{hop}', [HopController::class, 'destroy']);
 
 Route::get('yeasts', [YeastController::class, 'index']);
 Route::get('yeasts/{yeast}', [YeastController::class, 'show']);
 Route::post('yeasts', [YeastController::class, 'store']);
-Route::post('yeasts/{yeast}', [YeastController::class, 'update']);
+Route::put('yeasts/{yeast}', [YeastController::class, 'update']);
 Route::delete('yeasts/{yeast}', [YeastController::class, 'destroy']);
 
 Route::get('fermentables', [FermentableController::class, 'index']);
 Route::get('fermentables/{fermentable}', [FermentableController::class, 'show']);
 Route::post('fermentables', [FermentableController::class, 'store']);
-Route::post('fermentables/{fermentable}', [FermentableController::class, 'update']);
+Route::put('fermentables/{fermentable}', [FermentableController::class, 'update']);
 Route::delete('fermentables/{fermentable}', [FermentableController::class, 'destroy']);
 
 Route::get('extras', [ExtraController::class, 'index']);
 Route::get('extras/{extra}', [ExtraController::class, 'show']);
 Route::post('extras', [ExtraController::class, 'store']);
-Route::post('extras/{extra}', [ExtraController::class, 'update']);
+Route::put('extras/{extra}', [ExtraController::class, 'update']);
 Route::delete('extras/{extra}', [ExtraController::class, 'destroy']);
 

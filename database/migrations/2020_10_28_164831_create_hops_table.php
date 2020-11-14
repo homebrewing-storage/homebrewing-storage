@@ -12,7 +12,7 @@ class CreateHopsTable extends Migration
     {
         Schema::create('hops', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->nullable();
             $table->string('name');
             $table->integer('amount');
             $table->smallInteger('alpha_acid');
