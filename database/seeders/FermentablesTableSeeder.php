@@ -9,7 +9,7 @@ use Illuminate\Database\Seeder;
 
 class FermentablesTableSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         Fermentable::truncate();
 
@@ -17,6 +17,7 @@ class FermentablesTableSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             Fermentable::create([
+                'user_id' => $faker->numberBetween(1, 20),
                 'name' => $faker->word,
                 'type' => $faker->randomElement(['Grain', 'Sugar', 'Liquid extract', 'Dry extract', 'Adjunct']),
                 'yield' => $faker->randomDigit,

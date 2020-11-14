@@ -9,7 +9,7 @@ use Illuminate\Database\Seeder;
 
 class YeastsTableSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         Yeast::truncate();
 
@@ -17,6 +17,7 @@ class YeastsTableSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             Yeast::create([
+                'user_id' => $faker->numberBetween(1, 20),
                 'name' => $faker->word,
                 'type' => $faker->randomElement(['Liquid', 'Dry', 'Slant', 'Culture']),
                 'amount' => $faker->randomDigit,

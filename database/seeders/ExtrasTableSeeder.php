@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 
 class ExtrasTableSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         Extra::truncate();
 
@@ -15,6 +15,7 @@ class ExtrasTableSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             Extra::create([
+                'user_id' => $faker->numberBetween(1, 20),
                 'name' => $faker->word,
                 'type' => $faker->word,
                 'amount' => $faker->randomDigit,

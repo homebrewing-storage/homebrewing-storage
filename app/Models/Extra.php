@@ -10,4 +10,10 @@ class Extra extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'type', 'amount', 'expiration_date'];
+
+    public function user()
+    {
+    	// reference users table
+    	return $this->belongsTo('App\Models\User');
+    }
 }

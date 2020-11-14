@@ -12,4 +12,10 @@ class Hop extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'amount', 'alpha_acid', 'expiration_date'];
+
+    public function user()
+    {
+    	// reference users table
+    	return $this->belongsTo('App\Models\User');
+    }
 }

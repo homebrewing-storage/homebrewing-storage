@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ExtraResource;
+use App\Http\Requests\ExtraFormRequest;
 use App\Models\Extra;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,27 +13,42 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExtraController extends Controller
 {
+    // return collection of all extras
     public function index(): JsonResource
     {
         return ExtraResource::collection(Extra::all());
     }
 
-    public function store(Request $request): JsonResponse
+    // create new extra
+    public function store(ExtraFormRequest $request): JsonResponse
     {
-        Extra::create($this->validateHopForm());
-        return response()->json($request, 201);
+        // validate incoming form
+        $validated = $request->validated();
+        // if form is correct, create new entry in DB
+        // else redirect to the homepage and return 200
+        Extra::create($validated);
+
+        //return response with code 201(created)
+        return response()->json($validated, 201);
     }
 
+    // get specified hop
     public function show(Extra $extra): JsonResource
     {
+        // return specified extra by passing an id
         return new ExtraResource($extra);
     }
 
-    public function update(Request $request, Extra $extra): JsonResponse
+    // update specified extra
+    public function update(ExtraFormRequest $request, Extra $extra): JsonResponse
     {
-        $validatedForm = $this->validateHopForm();
-        $extra->update($validatedForm);
+        // check if new form is valid
+        $validated = $request->validated();
+        // if form is correct, update entry in DB
+        // else redirect to the homepage and return 200
+        $extra->update($validated);
 
+        //return response with code 201(updated)
         return response()->json($extra, 201);
     }
 
@@ -41,15 +57,5 @@ class ExtraController extends Controller
         $extra->delete();
 
         return response()->json(null, 204);
-    }
-
-    protected function validateHopForm(): array
-    {
-        return request()->validate([
-            'name' => 'required|min:3|max:255',
-            'type' => 'required|min:3|max:255',
-            'amount' => 'required|min:1',
-            'expiration_date' => 'required|date'
-        ]);
     }
 }

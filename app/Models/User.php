@@ -26,4 +26,25 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function hops()
+    {
+        // SELECT * FROM 'hops' WHERE 'user_id' = *current_user*
+        return $this->hasMany('App\Models\Hop');
+    }
+
+    public function yeasts()
+    {
+        return $this->hasMany('App\Models\Yeast');
+    }
+
+    public function extras()
+    {
+        return $this->hasMany('App\Models\Extra');
+    }
+
+    public function fermentables()
+    {
+        return $this->hasMany('App\Models\fermentable');
+    }
 }
