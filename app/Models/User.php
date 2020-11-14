@@ -33,17 +33,17 @@ class User extends Authenticatable
         return $this->hasMany(Hop::class);
     }
 
-    public function yeasts(): HasMany
+    public function yeasts()
     {
         return $this->hasMany(Yeast::class);
     }
 
-    public function extras(): hasMany
+    public function extras()
     {
         return $this->hasMany(Extra::class);
     }
 
-    public function fermentables(): hasMany
+    public function fermentables()
     {
         return $this->hasMany(fermentable::class);
     }

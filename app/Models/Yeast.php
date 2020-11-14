@@ -13,7 +13,7 @@ class Yeast extends Model
 
     protected $fillable = ['name', 'type', 'amount', 'expiration_date'];
 
-    public function user(): belongsTo
+    public function user()
     {
     	// reference users table
     	return $this->belongsTo(User::class);
