@@ -9,44 +9,38 @@ use App\Http\Requests\FermentableFormRequest;
 use App\Models\Fermentable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class FermentableController extends Controller
 {
     // return collection of all fermentables
-    public function index(): JsonResource
+    public function index(): JsonResponse
     {
-        return FermentableResource::collection(Fermentable::all());
+        return response()->json(FermentableResource::collection(Fermentable::all()), 200);
     }
 
     // create new fermentable
     public function store(FermentableFormRequest $request): JsonResponse
     {
-        // validate incoming form
-        $validated = $request->validated();
-        // if form is correct, create new entry in DB
-        // else redirect to the homepage and return 200
-        Fermentable::create($validated);
+        $dataRequest = $this->getDataRequest($request);
+        $fermentable = new Fermentable($dataRequest);   //create fermentable
+        $fermentable->save();
 
         //return response with code 201(created)
-        return response()->json($validated, 201);
+        return response()->json(new FermentableResource($fermentable), 201);
     }
 
     // get specified fermentable
-    public function show(Fermentable $fermentable): JsonResource
+    public function show(Fermentable $fermentable): JsonResponse
     {
         // return specified fermentable by passing an id
-        return new FermentableResource($fermentable);
+        return response()->json(new FermentableResource($fermentable), 200);
     }
 
     // update specified fermentable
     public function update(FermentableFormRequest $request, Fermentable $fermentable): JsonResponse
     {
-        // check if new form is valid
-        $validated = $request->validated();
-        // if form is correct, update entry in DB
-        // else redirect to the homepage and return 200
-        $fermentable->update($validated);
+        $dataRequest = $this->getDataRequest($request);
+        $fermentable->update($dataRequest); //update fermentable
 
         //return response with code 201(updated)
         return response()->json($fermentable, 201);
@@ -55,7 +49,11 @@ class FermentableController extends Controller
     public function destroy(Fermentable $fermentable): JsonResponse
     {
         $fermentable->delete();
-
         return response()->json(null, 204);
+    }
+
+    private function getDataRequest(Request $request): array
+    {
+        return $request->only('name', 'type', 'yield', 'ebc', 'amount', 'expiration_date');
     }
 }

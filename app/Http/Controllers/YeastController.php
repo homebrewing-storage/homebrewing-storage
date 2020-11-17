@@ -9,52 +9,50 @@ use App\Http\Requests\YeastFormRequest;
 use App\Models\Yeast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class YeastController extends Controller
 {
     // return collection of all yeasts
-    public function index(): JsonResource
+    public function index(): JsonResponse
     {
-        return YeastResource::collection(Yeast::all());
+        return response()->json(YeastResource::collection(Yeast::all()), 200);
     }
 
     // create new hop
     public function store(YeastFormRequest $request): JsonResponse
     {
-        // validate incoming form
-        $validated = $request->validated();
-        // if form is correct, create new entry in DB
-        // else redirect to the homepage and return 200
-        Yeast::create($validated);
+        $dataRequest = $this->getDataRequest($request);
+        $yeast = new Yeast($dataRequest);   //create yeast
+        $yeast->save();
 
         //return response with code 201(created)
-        return response()->json($validated, 201);
+        return response()->json(new YeastResource($yeast), 201);
     }
 
     // get specified yeast
-    public function show(Yeast $yeast): JsonResource
+    public function show(Yeast $yeast): JsonResponse
     {
         // return specified yeast by passing an id
-        return new YeastResource($yeast);
+        return response()->json(new YeastResource($yeast), 200);
     }
 
     // update specified yeast
     public function update(YeastFormRequest $request, Yeast $yeast): JsonResponse
     {
-        // check if new form is valid
-        $validated = $request->validated();
-        // if form is correct, update entry in DB
-        // else redirect to the homepage and return 200
-        $yeast->update($validated);
+        $dataRequest = $this->getDataRequest($request);
+        $yeast->update($dataRequest);   //update yeast
 
-        return response()->json($yeast, 201);
+        return response()->json(new YeastResource($yeast), 201);
     }
 
     public function destroy(Yeast $yeast): JsonResponse
     {
         $yeast->delete();
-
         return response()->json(null, 204);
+    }
+
+    private function getDataRequest(Request $request): array
+    {
+        return $request->only('name', 'type', 'amount', 'expiration_date');
     }
 }

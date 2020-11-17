@@ -12,17 +12,12 @@ class CreateHopsTable extends Migration
     {
         Schema::create('hops', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->integer('amount');
             $table->smallInteger('alpha_acid');
             $table->date('expiration_date');
             $table->timestamps();
-
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
         });
     }
 

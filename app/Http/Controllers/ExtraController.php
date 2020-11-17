@@ -9,53 +9,51 @@ use App\Http\Requests\ExtraFormRequest;
 use App\Models\Extra;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExtraController extends Controller
 {
     // return collection of all extras
-    public function index(): JsonResource
+    public function index(): JsonResponse
     {
-        return ExtraResource::collection(Extra::all());
+        return response()->json(ExtraResource::collection(Extra::all()), 200);
     }
 
     // create new extra
     public function store(ExtraFormRequest $request): JsonResponse
     {
-        // validate incoming form
-        $validated = $request->validated();
-        // if form is correct, create new entry in DB
-        // else redirect to the homepage and return 200
-        Extra::create($validated);
+        $dataRequest = $this->getDataRequest($request);
+        $extra = new Extra($dataRequest);   //create Extra
+        $extra->save();
 
         //return response with code 201(created)
-        return response()->json($validated, 201);
+        return response()->json(new ExtraResource($extra), 201);
     }
 
     // get specified hop
-    public function show(Extra $extra): JsonResource
+    public function show(Extra $extra): JsonResponse
     {
         // return specified extra by passing an id
-        return new ExtraResource($extra);
+        return response()->json(new ExtraResource($extra), 200);
     }
 
     // update specified extra
     public function update(ExtraFormRequest $request, Extra $extra): JsonResponse
     {
-        // check if new form is valid
-        $validated = $request->validated();
-        // if form is correct, update entry in DB
-        // else redirect to the homepage and return 200
-        $extra->update($validated);
+        $dataRequest = $this->getDataRequest($request);
+        $extra->update($dataRequest);   //update Extra
 
         //return response with code 201(updated)
-        return response()->json($extra, 201);
+        return response()->json(new ExtraResource($extra), 201);
     }
 
     public function destroy(Extra $extra): JsonResponse
     {
         $extra->delete();
-
         return response()->json(null, 204);
+    }
+
+    private function getDataRequest(Request $request): array
+    {
+        return $request->only('name', 'type', 'amount', 'expiration_date');
     }
 }

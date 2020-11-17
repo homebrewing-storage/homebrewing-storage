@@ -6,10 +6,8 @@ use App\Http\Controllers\HopController;
 use App\Http\Controllers\YeastController;
 use App\Http\Controllers\FermentableController;
 use App\Http\Controllers\ExtraController;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\Hop;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
