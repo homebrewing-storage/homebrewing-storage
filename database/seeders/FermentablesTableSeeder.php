@@ -11,20 +11,6 @@ class FermentablesTableSeeder extends Seeder
 {
     public function run(): void
     {
-        Fermentable::truncate();
-
-        $faker = \Faker\Factory::create();
-
-        for ($i = 0; $i < 20; $i++) {
-            Fermentable::create([
-                'user_id' => $faker->numberBetween(1, 20),
-                'name' => $faker->word,
-                'type_id' => $faker->numberBetween(1, 5),
-                'yield' => $faker->randomDigit,
-                'ebc' => $faker->randomDigit,
-                'amount' => $faker->randomDigit,
-                'expiration_date' => $faker->date(),
-            ]);
-        }
+        Fermentable::factory()->count(20)->create();
     }
 }

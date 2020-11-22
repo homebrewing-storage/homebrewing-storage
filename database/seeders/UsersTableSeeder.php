@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\Extra;
+use App\Models\Fermentable;
+use App\Models\Hop;
 use App\Models\User;
+use App\Models\Yeast;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
 {
     public function run(): void
     {
-
-        $faker = \Faker\Factory::create();
-
-        for ($i = 0; $i < 20; $i++) {
-            User::create([
-                'name' => $faker->word,
-                'email' => $faker->email,
-                'email_verified_at' => $faker->date(),
-                'password' => $faker->word,
-            ]);
-        }
+        User::factory()
+            ->times(20)
+            ->has(Extra::factory()->count(5))
+            ->has(Fermentable::factory()->count(5))
+            ->has(Hop::factory()->count(5))
+            ->has(Yeast::factory()->count(5))
+            ->create();
     }
 }
