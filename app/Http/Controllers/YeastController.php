@@ -9,6 +9,7 @@ use App\Http\Requests\YeastFormRequest;
 use App\Models\Yeast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class YeastController extends Controller
 {
@@ -22,6 +23,7 @@ class YeastController extends Controller
     public function store(YeastFormRequest $request): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
+        $dataRequest = Arr::add($dataRequest, 'user_id', '1');
         $yeast = new Yeast($dataRequest);   //create yeast
         $yeast->save();
 
@@ -53,6 +55,6 @@ class YeastController extends Controller
 
     private function getDataRequest(Request $request): array
     {
-        return $request->only('name', 'type', 'amount', 'expiration_date');
+        return $request->only('name', 'type_id', 'amount', 'expiration_date');
     }
 }

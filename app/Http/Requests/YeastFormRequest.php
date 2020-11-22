@@ -15,7 +15,7 @@ class YeastFormRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:255',
-            'type' => 'required|string',
+            'type_id' => 'required|numeric|exists:yeast_types,id',
             'amount' => 'required|numeric|min:1',
             'expiration_date' => 'required|date'
         ];

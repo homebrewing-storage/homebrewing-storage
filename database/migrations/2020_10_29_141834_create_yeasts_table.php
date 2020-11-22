@@ -8,22 +8,20 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateYeastsTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('yeasts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('type_id')->references('id')->on('yeast_types')->cascadeOnDelete();
             $table->string('name');
-            $table->enum('type',
-                ['Liquid', 'Dry', 'Slant', 'Culture']
-            );
             $table->integer('amount');
             $table->date('expiration_date');
             $table->timestamps();
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('yeasts');
     }

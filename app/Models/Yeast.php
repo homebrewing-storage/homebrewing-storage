@@ -13,6 +13,8 @@ class Yeast extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
+        'type_id',
         'name',
         'type',
         'amount',
@@ -23,5 +25,10 @@ class Yeast extends Model
     {
         // reference users table
         return $this->belongsTo(User::class);
+    }
+
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(YeastType::class, 'type_id');
     }
 }
