@@ -12,7 +12,7 @@ class ExtraResource extends JsonResource
     {
         return [
             'name' => $this->name,
-            'type' => $this->type,
+            'type' => new TypeResource($this->type),
             'amount' => $this->amount,
             'expiration_date' => $this->expiration_date,
         ];

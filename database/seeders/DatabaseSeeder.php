@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             HopsTableSeeder::class,
             YeastTypesTableSeeder::class,
             YeastsTableSeeder::class,
+            ExtraTypesTableSeeder::class,
             ExtrasTableSeeder::class,
         ]);
     }

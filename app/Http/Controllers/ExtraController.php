@@ -9,6 +9,7 @@ use App\Http\Requests\ExtraFormRequest;
 use App\Models\Extra;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class ExtraController extends Controller
 {
@@ -22,6 +23,7 @@ class ExtraController extends Controller
     public function store(ExtraFormRequest $request): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
+        $dataRequest = Arr::add($dataRequest, 'user_id', '1');
         $extra = new Extra($dataRequest);   //create Extra
         $extra->save();
 
@@ -54,6 +56,6 @@ class ExtraController extends Controller
 
     private function getDataRequest(Request $request): array
     {
-        return $request->only('name', 'type', 'amount', 'expiration_date');
+        return $request->only('name', 'type_id', 'amount', 'expiration_date');
     }
 }
