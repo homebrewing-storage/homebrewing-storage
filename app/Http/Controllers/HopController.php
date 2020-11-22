@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\HopCollectionResource;
-use App\Http\Resources\HopResource;
 use App\Http\Requests\HopFormRequest;
+use App\Http\Resources\Hop\HopCollectionResource;
+use App\Http\Resources\Hop\HopResource;
 use App\Models\Hop;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

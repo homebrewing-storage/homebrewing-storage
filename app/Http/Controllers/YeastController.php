@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\YeastCollectionResource;
-use App\Http\Resources\YeastResource;
 use App\Http\Requests\YeastFormRequest;
+use App\Http\Resources\Yeast\YeastCollectionResource;
+use App\Http\Resources\Yeast\YeastResource;
 use App\Models\Yeast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

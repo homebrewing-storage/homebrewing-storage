@@ -6,9 +6,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class FermentableCollectionResource extends ResourceCollection
+class BaseCollectionResource extends ResourceCollection
 {
-    private array $pagination;
+    protected array $pagination;
 
     public function __construct($resource)
     {
@@ -23,13 +23,5 @@ class FermentableCollectionResource extends ResourceCollection
         $resource = $resource->getCollection();
 
         parent::__construct($resource);
-    }
-
-    public function toArray($request): array
-    {
-        return [
-            'data' => FermentableResource::collection($this->collection),
-            'pagination' => $this->pagination
-        ];
     }
 }

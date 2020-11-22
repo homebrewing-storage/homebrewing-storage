@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Fermentable;
 
+use App\Http\Resources\TypeResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FermentableResource extends JsonResource

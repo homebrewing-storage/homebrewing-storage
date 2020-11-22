@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\FermentableCollectionResource;
-use App\Http\Resources\FermentableResource;
 use App\Http\Requests\FermentableFormRequest;
+use App\Http\Resources\Fermentable\FermentableCollectionResource;
+use App\Http\Resources\Fermentable\FermentableResource;
 use App\Models\Fermentable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

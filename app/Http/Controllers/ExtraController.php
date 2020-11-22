@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ExtraCollectionResource;
-use App\Http\Resources\ExtraResource;
 use App\Http\Requests\ExtraFormRequest;
+use App\Http\Resources\Extra\ExtraCollectionResource;
+use App\Http\Resources\Extra\ExtraResource;
 use App\Models\Extra;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

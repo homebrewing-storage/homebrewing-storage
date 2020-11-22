@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Yeast;
 
+use App\Http\Resources\TypeResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ExtraResource extends JsonResource
+class YeastResource extends JsonResource
 {
     public function toArray($request): array
     {
