@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateHopsTable extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('hops', function (Blueprint $table) {
             $table->id();
@@ -21,7 +21,7 @@ class CreateHopsTable extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('hops');
     }
