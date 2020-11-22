@@ -12,7 +12,7 @@ class FermentableResource extends JsonResource
     {
         return [
             'name' => $this->name,
-            'type' => $this->type,
+            'type_id' => new FermentableTypeResource($this->type),
             'yield' => $this->yield,
             'ebc' => $this->ebc,
             'amount' => $this->amount,

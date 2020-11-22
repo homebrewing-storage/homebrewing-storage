@@ -10,10 +10,13 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(UsersTableSeeder::class);
-        $this->call(FermentablesTableSeeder::class);
-        $this->call(HopsTableSeeder::class);
-        $this->call(YeastsTableSeeder::class);
-        $this->call(ExtrasTableSeeder::class);
+        $this->call([
+            UsersTableSeeder::class,
+            FermentableTypesTableSeeder::class,
+            FermentablesTableSeeder::class,
+            HopsTableSeeder::class,
+            YeastsTableSeeder::class,
+            ExtrasTableSeeder::class,
+        ]);
     }
 }

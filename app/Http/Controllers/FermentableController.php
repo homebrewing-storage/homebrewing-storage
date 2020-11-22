@@ -9,6 +9,7 @@ use App\Http\Requests\FermentableFormRequest;
 use App\Models\Fermentable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class FermentableController extends Controller
 {
@@ -22,6 +23,8 @@ class FermentableController extends Controller
     public function store(FermentableFormRequest $request): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
+        $dataRequest = Arr::add($dataRequest, 'user_id', '1');
+
         $fermentable = new Fermentable($dataRequest);   //create fermentable
         $fermentable->save();
 
@@ -43,7 +46,7 @@ class FermentableController extends Controller
         $fermentable->update($dataRequest); //update fermentable
 
         //return response with code 201(updated)
-        return response()->json($fermentable, 201);
+        return response()->json(new FermentableResource($fermentable), 201);
     }
 
     public function destroy(Fermentable $fermentable): JsonResponse
@@ -54,6 +57,6 @@ class FermentableController extends Controller
 
     private function getDataRequest(Request $request): array
     {
-        return $request->only('name', 'type', 'yield', 'ebc', 'amount', 'expiration_date');
+        return $request->only('name', 'type_id', 'yield', 'ebc', 'amount', 'expiration_date');
     }
 }

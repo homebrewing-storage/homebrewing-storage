@@ -13,8 +13,9 @@ class Fermentable extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
+        'type_id',
         'name',
-        'type',
         'yield',
         'ebc',
         'amount',
@@ -25,5 +26,10 @@ class Fermentable extends Model
     {
         // reference users table
         return $this->belongsTo(User::class);
+    }
+
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(FermentableType::class,'type_id');
     }
 }
