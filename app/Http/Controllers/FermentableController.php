@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\FermentableCollectionResource;
 use App\Http\Resources\FermentableResource;
 use App\Http\Requests\FermentableFormRequest;
 use App\Models\Fermentable;
@@ -14,9 +15,12 @@ use Illuminate\Support\Arr;
 class FermentableController extends Controller
 {
     // return collection of all fermentables
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json(FermentableResource::collection(Fermentable::all()), 200);
+        $perPage = $request->query('perPage', 30);
+        $page = $request->query('page', 1);
+        $fermentablesPaginate = Fermentable::query()->paginate($perPage, ['*'], 'page', $page);
+        return response()->json(new FermentableCollectionResource($fermentablesPaginate), 200);
     }
 
     // create new fermentable

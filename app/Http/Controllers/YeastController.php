@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\YeastCollectionResource;
 use App\Http\Resources\YeastResource;
 use App\Http\Requests\YeastFormRequest;
 use App\Models\Yeast;
@@ -14,9 +15,12 @@ use Illuminate\Support\Arr;
 class YeastController extends Controller
 {
     // return collection of all yeasts
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json(YeastResource::collection(Yeast::all()), 200);
+        $perPage = $request->query('perPage', 30);
+        $page = $request->query('page', 1);
+        $yeastsPaginate = Yeast::query()->paginate($perPage, ['*'], 'page', $page);
+        return response()->json(new YeastCollectionResource($yeastsPaginate), 200);
     }
 
     // create new hop

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ExtraCollectionResource;
 use App\Http\Resources\ExtraResource;
 use App\Http\Requests\ExtraFormRequest;
 use App\Models\Extra;
@@ -14,9 +15,12 @@ use Illuminate\Support\Arr;
 class ExtraController extends Controller
 {
     // return collection of all extras
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json(ExtraResource::collection(Extra::all()), 200);
+        $perPage = $request->query('perPage', 30);
+        $page = $request->query('page', 1);
+        $extrasPaginate = Extra::query()->paginate($perPage, ['*'], 'page', $page);
+        return response()->json(new ExtraCollectionResource($extrasPaginate), 200);
     }
 
     // create new extra

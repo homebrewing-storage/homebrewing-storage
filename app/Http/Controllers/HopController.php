@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\HopCollectionResource;
 use App\Http\Resources\HopResource;
 use App\Http\Requests\HopFormRequest;
 use App\Models\Hop;
@@ -13,9 +14,12 @@ use Illuminate\Http\Request;
 class HopController extends Controller
 {
     // return collection of all hops
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json(HopResource::collection(Hop::all()), 200);
+        $perPage = $request->query('perPage', 30);
+        $page = $request->query('page', 1);
+        $hopsPaginate = Hop::query()->paginate($perPage, ['*'], 'page', $page);
+        return response()->json(new HopCollectionResource($hopsPaginate), 200);
     }
 
     // create new hop
