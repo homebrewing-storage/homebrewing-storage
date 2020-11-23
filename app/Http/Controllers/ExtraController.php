@@ -8,6 +8,7 @@ use App\Http\Requests\ExtraFormRequest;
 use App\Http\Resources\Extra\ExtraCollectionResource;
 use App\Http\Resources\Extra\ExtraResource;
 use App\Models\Extra;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -19,7 +20,8 @@ class ExtraController extends Controller
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $extrasPaginate = Extra::query()->paginate($perPage, ['*'], 'page', $page);
+        $user = User::query()->findOrFail(1);
+        $extrasPaginate = $user->extras()->paginate($perPage, ['*'], 'page', $page);
         return response()->json(new ExtraCollectionResource($extrasPaginate), 200);
     }
 

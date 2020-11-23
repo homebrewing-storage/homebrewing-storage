@@ -8,6 +8,7 @@ use App\Http\Requests\FermentableFormRequest;
 use App\Http\Resources\Fermentable\FermentableCollectionResource;
 use App\Http\Resources\Fermentable\FermentableResource;
 use App\Models\Fermentable;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -19,7 +20,8 @@ class FermentableController extends Controller
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $fermentablesPaginate = Fermentable::query()->paginate($perPage, ['*'], 'page', $page);
+        $user = User::query()->findOrFail(1);
+        $fermentablesPaginate = $user->fermentables()->paginate($perPage, ['*'], 'page', $page);
         return response()->json(new FermentableCollectionResource($fermentablesPaginate), 200);
     }
 

@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\YeastFormRequest;
 use App\Http\Resources\Yeast\YeastCollectionResource;
 use App\Http\Resources\Yeast\YeastResource;
+use App\Models\User;
 use App\Models\Yeast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,8 @@ class YeastController extends Controller
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $yeastsPaginate = Yeast::query()->paginate($perPage, ['*'], 'page', $page);
+        $user = User::query()->findOrFail(1);
+        $yeastsPaginate = $user->hops()->paginate($perPage, ['*'], 'page', $page);
         return response()->json(new YeastCollectionResource($yeastsPaginate), 200);
     }
 

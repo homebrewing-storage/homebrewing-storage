@@ -8,6 +8,7 @@ use App\Http\Requests\HopFormRequest;
 use App\Http\Resources\Hop\HopCollectionResource;
 use App\Http\Resources\Hop\HopResource;
 use App\Models\Hop;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,8 @@ class HopController extends Controller
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $hopsPaginate = Hop::query()->paginate($perPage, ['*'], 'page', $page);
+        $user = User::query()->findOrFail(1);
+        $hopsPaginate = $user->hops()->paginate($perPage, ['*'], 'page', $page);
         return response()->json(new HopCollectionResource($hopsPaginate), 200);
     }
 
