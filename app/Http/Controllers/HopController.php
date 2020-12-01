@@ -11,6 +11,7 @@ use App\Models\Hop;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class HopController extends Controller
 {
@@ -28,6 +29,8 @@ class HopController extends Controller
     public function store(HopFormRequest $request): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
+        $dataRequest = Arr::add($dataRequest, 'user_id', '1');
+
         $hop = new Hop($dataRequest);   //create Hop
         $hop->save();
 
@@ -60,6 +63,6 @@ class HopController extends Controller
 
     private function getDataRequest(Request $request): array
     {
-        return $request->only('name', 'type', 'amount', 'expiration_date');
+        return $request->only('name', 'amount', 'alpha_acid', 'expiration_date');
     }
 }
