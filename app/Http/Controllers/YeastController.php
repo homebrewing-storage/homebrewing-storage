@@ -21,7 +21,7 @@ class YeastController extends Controller
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
         $user = User::query()->findOrFail(1);
-        $yeastsPaginate = $user->hops()->paginate($perPage, ['*'], 'page', $page);
+        $yeastsPaginate = $user->yeasts()->paginate($perPage, ['*'], 'page', $page);
         return response()->json(new YeastCollectionResource($yeastsPaginate), 200);
     }
 
