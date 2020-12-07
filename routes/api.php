@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\ResetPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,13 @@ Route::prefix('/email')->group(function (): void {
     Route::post('/verification-notification', [AuthenticationController::class, 'resend'])
         ->middleware(['auth:sanctum', 'throttle:6,1'])
         ->name('verification.send');
+});
+
+//Reset Password
+Route::middleware('guest')->group(function (): void {
+    Route::post('/forgot-password', [ResetPasswordController::class, 'forgotPassword'])->name('password.email');
+    Route::get('/reset-password/{token}', [ResetPasswordController::class, 'getToken'])->name('password.reset');
+    Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword'])->name('password.update');
 });
 
 // Authorization
