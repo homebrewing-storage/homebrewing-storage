@@ -7,14 +7,21 @@ namespace App\Services;
 use App\Exceptions\Auth\UnauthorizedException;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class AuthenticationServices
 {
+    private Hasher $hash;
+
+    public function __construct(Hasher $hash)
+    {
+        $this->hash = $hash;
+    }
+
     public function register(array $data): string
     {
-        $data['password'] = Hash::make($data['password']);
+        $data['password'] = $this->hash->make($data['password']);
         $user = new User($data);
         $user->save();
         event(new Registered($user));
@@ -29,7 +36,7 @@ class AuthenticationServices
     public function login(array $formCredentials): string
     {
         $user = User::query()->firstWhere('email', $formCredentials['email']);
-        if (!$user || !Hash::check($formCredentials['password'], $user->password)) {
+        if (!$user || !$this->hash->check($formCredentials['password'], $user->password)) {
             throw new UnauthorizedException();
         }
         return $this->createToken($user);

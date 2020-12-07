@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\LoginUserRequest;
-use App\Http\Requests\RegisterUserRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginUserRequest;
+use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Services\AuthenticationServices;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -33,22 +33,5 @@ class AuthenticationController extends Controller
     public function logout(Request $request, AuthenticationServices $authenticationServices): void
     {
         $authenticationServices->logout($request);
-    }
-
-    public function verify(): JsonResponse
-    {
-        return response()->json(['message' => 'Check your mailbox']);
-    }
-
-    public function accept(EmailVerificationRequest $request): JsonResponse
-    {
-        $request->fulfill();
-        return response()->json(['message' => 'Verify successful']);
-    }
-
-    public function resend(Request $request): JsonResponse
-    {
-        $request->user()->sendEmailVerificationNotification();
-        return response()->json(['message' => 'Resending The Verification Email']);
     }
 }

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\EmailRequest;
-use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\EmailRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Services\ResetPasswordServices;
 use Illuminate\Http\JsonResponse;
 

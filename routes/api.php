@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,15 +14,15 @@ Route::post('/login', [AuthenticationController::class, 'login'])->name('login')
 
 //Email Verification
 Route::prefix('/email')->group(function (): void {
-    Route::get('/verify', [AuthenticationController::class, 'verify'])
+    Route::get('/verify', [EmailVerificationController::class, 'verify'])
         ->middleware('auth:sanctum')
         ->name('verification.notice');
 
-    Route::get('/verify/{id}/{hash}', [AuthenticationController::class, 'accept'])
+    Route::get('/verify/{id}/{hash}', [EmailVerificationController::class, 'accept'])
         ->middleware(['auth:sanctum', 'signed'])
         ->name('verification.verify');
 
-    Route::post('/verification-notification', [AuthenticationController::class, 'resend'])
+    Route::post('/verification-notification', [EmailVerificationController::class, 'resend'])
         ->middleware(['auth:sanctum', 'throttle:6,1'])
         ->name('verification.send');
 });
