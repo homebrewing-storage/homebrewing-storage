@@ -2,13 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Auth\AuthenticationController;
-use App\Http\Controllers\Auth\EmailVerificationController;
-use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\HopController;
-use App\Http\Controllers\YeastController;
-use App\Http\Controllers\FermentableController;
-use App\Http\Controllers\ExtraController;
+use App\Http\Controllers\Auth\{AuthenticationController, EmailVerificationController, ResetPasswordController};
+use App\Http\Controllers\Ingredients\{HopController, YeastController, FermentableController, ExtraController};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +39,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
         return $request->user();
     });
     Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
+
     Route::get('hops', [HopController::class, 'index']);
     Route::get('hops/{hop}', [HopController::class, 'show']);
     Route::post('hops', [HopController::class, 'store']);

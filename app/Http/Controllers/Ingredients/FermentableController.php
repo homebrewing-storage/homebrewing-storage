@@ -2,63 +2,55 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Ingredients;
 
-use App\Http\Requests\FermentableFormRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Ingredients\FermentableFormRequest;
 use App\Http\Resources\Fermentable\FermentableCollectionResource;
 use App\Http\Resources\Fermentable\FermentableResource;
 use App\Models\Fermentable;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class FermentableController extends Controller
 {
-    // return collection of all fermentables
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $user = User::query()->findOrFail(1);
+        $user = Auth::user();
         $fermentablesPaginate = $user->fermentables()->paginate($perPage, ['*'], 'page', $page);
-        return response()->json(new FermentableCollectionResource($fermentablesPaginate), 200);
+        return response()->json(new FermentableCollectionResource($fermentablesPaginate));
     }
 
-    // create new fermentable
     public function store(FermentableFormRequest $request): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
         $dataRequest = Arr::add($dataRequest, 'user_id', '1');
-
-        $fermentable = new Fermentable($dataRequest);   //create fermentable
+        $fermentable = new Fermentable($dataRequest);
         $fermentable->save();
-
-        //return response with code 201(created)
-        return response()->json(new FermentableResource($fermentable), 201);
+        return response()->json(new FermentableResource($fermentable), Response::HTTP_CREATED);
     }
 
-    // get specified fermentable
     public function show(Fermentable $fermentable): JsonResponse
     {
-        // return specified fermentable by passing an id
-        return response()->json(new FermentableResource($fermentable), 200);
+        return response()->json(new FermentableResource($fermentable));
     }
 
-    // update specified fermentable
     public function update(FermentableFormRequest $request, Fermentable $fermentable): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
-        $fermentable->update($dataRequest); //update fermentable
-
-        //return response with code 201(updated)
-        return response()->json(new FermentableResource($fermentable), 201);
+        $fermentable->update($dataRequest);
+        return response()->json(new FermentableResource($fermentable), Response::HTTP_CREATED);
     }
 
     public function destroy(Fermentable $fermentable): JsonResponse
     {
         $fermentable->delete();
-        return response()->json(null, 204);
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
     private function getDataRequest(Request $request): array

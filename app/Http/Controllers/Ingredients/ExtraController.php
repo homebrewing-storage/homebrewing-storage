@@ -2,62 +2,55 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Ingredients;
 
-use App\Http\Requests\ExtraFormRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Ingredients\ExtraFormRequest;
 use App\Http\Resources\Extra\ExtraCollectionResource;
 use App\Http\Resources\Extra\ExtraResource;
 use App\Models\Extra;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class ExtraController extends Controller
 {
-    // return collection of all extras
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $user = User::query()->findOrFail(1);
+        $user = Auth::user();
         $extrasPaginate = $user->extras()->paginate($perPage, ['*'], 'page', $page);
-        return response()->json(new ExtraCollectionResource($extrasPaginate), 200);
+        return response()->json(new ExtraCollectionResource($extrasPaginate));
     }
 
-    // create new extra
     public function store(ExtraFormRequest $request): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
         $dataRequest = Arr::add($dataRequest, 'user_id', '1');
-        $extra = new Extra($dataRequest);   //create Extra
+        $extra = new Extra($dataRequest);
         $extra->save();
-
-        //return response with code 201(created)
-        return response()->json(new ExtraResource($extra), 201);
+        return response()->json(new ExtraResource($extra), Response::HTTP_CREATED);
     }
 
-    // get specified hop
     public function show(Extra $extra): JsonResponse
     {
-        // return specified extra by passing an id
-        return response()->json(new ExtraResource($extra), 200);
+        return response()->json(new ExtraResource($extra));
     }
 
-    // update specified extra
     public function update(ExtraFormRequest $request, Extra $extra): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
-        $extra->update($dataRequest);   //update Extra
-
-        //return response with code 201(updated)
-        return response()->json(new ExtraResource($extra), 201);
+        $extra->update($dataRequest);
+        return response()->json(new ExtraResource($extra), Response::HTTP_CREATED);
     }
 
     public function destroy(Extra $extra): JsonResponse
     {
         $extra->delete();
-        return response()->json(null, 204);
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
     private function getDataRequest(Request $request): array
