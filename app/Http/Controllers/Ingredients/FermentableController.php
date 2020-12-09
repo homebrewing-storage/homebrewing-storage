@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Ingredients\FermentableFormRequest;
 use App\Http\Resources\Fermentable\FermentableCollectionResource;
 use App\Http\Resources\Fermentable\FermentableResource;
+use App\Http\Resources\TypeResource;
 use App\Models\Fermentable;
+use App\Models\FermentableType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -51,6 +53,11 @@ class FermentableController extends Controller
     {
         $fermentable->delete();
         return response()->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function types(): JsonResponse
+    {
+        return response()->json(TypeResource::collection(FermentableType::all()));
     }
 
     private function getDataRequest(Request $request): array

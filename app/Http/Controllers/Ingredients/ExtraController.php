@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Ingredients\ExtraFormRequest;
 use App\Http\Resources\Extra\ExtraCollectionResource;
 use App\Http\Resources\Extra\ExtraResource;
+use App\Http\Resources\TypeResource;
 use App\Models\Extra;
+use App\Models\ExtraType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -51,6 +53,11 @@ class ExtraController extends Controller
     {
         $extra->delete();
         return response()->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function types(): JsonResponse
+    {
+        return response()->json(TypeResource::collection(ExtraType::all()));
     }
 
     private function getDataRequest(Request $request): array

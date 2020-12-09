@@ -2,8 +2,17 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Auth\{AuthenticationController, EmailVerificationController, ResetPasswordController};
-use App\Http\Controllers\Ingredients\{HopController, YeastController, FermentableController, ExtraController};
+use App\Http\Controllers\Auth\{
+    AuthenticationController,
+    EmailVerificationController,
+    ResetPasswordController
+};
+use App\Http\Controllers\Ingredients\{
+    HopController,
+    YeastController,
+    FermentableController,
+    ExtraController
+};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -12,17 +21,16 @@ Route::post('/register', [AuthenticationController::class, 'register'])->name('r
 Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
 
 //Email Verification
-Route::prefix('/email')->group(function (): void {
+Route::middleware('auth:sanctum')->prefix('/email')->group(function (): void {
     Route::get('/verify', [EmailVerificationController::class, 'verify'])
-        ->middleware('auth:sanctum')
         ->name('verification.notice');
 
     Route::get('/verify/{id}/{hash}', [EmailVerificationController::class, 'accept'])
-        ->middleware(['auth:sanctum', 'signed'])
+        ->middleware('signed')
         ->name('verification.verify');
 
     Route::post('/verification-notification', [EmailVerificationController::class, 'resend'])
-        ->middleware(['auth:sanctum', 'throttle:6,1'])
+        ->middleware('throttle:6,1')
         ->name('verification.send');
 });
 
@@ -39,6 +47,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
         return $request->user();
     });
     Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
+
+    Route::get('/extra-type', [ExtraController::class, 'types']);
+    Route::get('/fermentable-type', [FermentableController::class, 'types']);
+    Route::get('/yeast-type', [YeastController::class, 'types']);
 
     Route::get('hops', [HopController::class, 'index']);
     Route::get('hops/{hop}', [HopController::class, 'show']);

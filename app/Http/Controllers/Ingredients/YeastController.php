@@ -6,9 +6,11 @@ namespace App\Http\Controllers\Ingredients;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ingredients\YeastFormRequest;
+use App\Http\Resources\TypeResource;
 use App\Http\Resources\Yeast\YeastCollectionResource;
 use App\Http\Resources\Yeast\YeastResource;
 use App\Models\Yeast;
+use App\Models\YeastType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -51,6 +53,11 @@ class YeastController extends Controller
     {
         $yeast->delete();
         return response()->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function types(): JsonResponse
+    {
+        return response()->json(TypeResource::collection(YeastType::all()));
     }
 
     private function getDataRequest(Request $request): array
