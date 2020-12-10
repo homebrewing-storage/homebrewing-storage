@@ -14,24 +14,28 @@ use App\Models\FermentableType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class FermentableController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:check,fermentable')->only(['show', 'update', 'destroy']);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $user = Auth::user();
-        $fermentablesPaginate = $user->fermentables()->paginate($perPage, ['*'], 'page', $page);
+        $fermentablesPaginate = $request->user()->fermentables()->paginate($perPage, ['*'], 'page', $page);
         return response()->json(new FermentableCollectionResource($fermentablesPaginate));
     }
 
     public function store(FermentableFormRequest $request): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
-        $dataRequest = Arr::add($dataRequest, 'user_id', '1');
+        $userId = $request->user()->id;
+        $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $fermentable = new Fermentable($dataRequest);
         $fermentable->save();
         return response()->json(new FermentableResource($fermentable), Response::HTTP_CREATED);

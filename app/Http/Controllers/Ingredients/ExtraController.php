@@ -14,24 +14,28 @@ use App\Models\ExtraType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExtraController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:check,extra')->only(['show', 'update', 'destroy']);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $user = Auth::user();
-        $extrasPaginate = $user->extras()->paginate($perPage, ['*'], 'page', $page);
+        $extrasPaginate = $request->user()->extras()->paginate($perPage, ['*'], 'page', $page);
         return response()->json(new ExtraCollectionResource($extrasPaginate));
     }
 
     public function store(ExtraFormRequest $request): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
-        $dataRequest = Arr::add($dataRequest, 'user_id', '1');
+        $userId = $request->user()->id;
+        $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $extra = new Extra($dataRequest);
         $extra->save();
         return response()->json(new ExtraResource($extra), Response::HTTP_CREATED);

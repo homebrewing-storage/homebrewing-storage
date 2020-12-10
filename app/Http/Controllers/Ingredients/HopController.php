@@ -12,24 +12,28 @@ use App\Models\Hop;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class HopController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:check,hop')->only(['show', 'update', 'destroy']);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $user = Auth::user();
-        $hopsPaginate = $user->hops()->paginate($perPage, ['*'], 'page', $page);
+        $hopsPaginate = $request->user()->hops()->paginate($perPage, ['*'], 'page', $page);
         return response()->json(new HopCollectionResource($hopsPaginate));
     }
 
     public function store(HopFormRequest $request): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
-        $dataRequest = Arr::add($dataRequest, 'user_id', '1');
+        $userId = $request->user()->id;
+        $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $hop = new Hop($dataRequest);
         $hop->save();
         return response()->json(new HopResource($hop), Response::HTTP_CREATED);

@@ -14,24 +14,28 @@ use App\Models\YeastType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class YeastController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:check,yeast')->only(['show', 'update', 'destroy']);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $user = Auth::user();
-        $yeastsPaginate = $user->yeasts()->paginate($perPage, ['*'], 'page', $page);
+        $yeastsPaginate = $request->user()->yeasts()->paginate($perPage, ['*'], 'page', $page);
         return response()->json(new YeastCollectionResource($yeastsPaginate));
     }
 
     public function store(YeastFormRequest $request): JsonResponse
     {
         $dataRequest = $this->getDataRequest($request);
-        $dataRequest = Arr::add($dataRequest, 'user_id', '1');
+        $userId = $request->user()->id;
+        $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $yeast = new Yeast($dataRequest);
         $yeast->save();
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
