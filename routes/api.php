@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\IngredientExpirationController;
 use App\Http\Controllers\Auth\{
     AuthenticationController,
     EmailVerificationController,
@@ -75,4 +76,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
     Route::post('extras', [ExtraController::class, 'store']);
     Route::put('extras/{extra}', [ExtraController::class, 'update']);
     Route::delete('extras/{extra}', [ExtraController::class, 'destroy']);
+
+    Route::get('notifications', [IngredientExpirationController::class, 'index']);
+    Route::delete('notifications/{notification}', [IngredientExpirationController::class, 'destroy']);
+    Route::put('notifications/{notification}', [IngredientExpirationController::class, 'update']);
 });

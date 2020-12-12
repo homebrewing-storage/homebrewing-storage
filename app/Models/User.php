@@ -51,4 +51,9 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     {
         return $this->hasMany(Fermentable::class);
     }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(IngredientExpiration::class);
+    }
 }
