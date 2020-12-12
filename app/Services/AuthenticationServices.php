@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\Request;
+use Laravel\Socialite\Contracts\User as SocialMediaUser;
 
 class AuthenticationServices
 {
@@ -38,6 +39,21 @@ class AuthenticationServices
         $user = User::query()->firstWhere('email', $formCredentials['email']);
         if (!$user || !$this->hash->check($formCredentials['password'], $user->password)) {
             throw new UnauthorizedException();
+        }
+        return $this->createToken($user);
+    }
+
+    public function loginSocialMedia(SocialMediaUser $socialMediaUser): string
+    {
+        $user = User::query()->firstWhere('provider_id', $socialMediaUser->getId());
+        if ($user === null) {
+            $user = new User([
+                'name' => $socialMediaUser->getName(),
+                'email' => $socialMediaUser->getEmail(),
+                'provider_id' => $socialMediaUser->getId(),
+                'email_verified_at' => now(),
+            ]);
+            $user->save();
         }
         return $this->createToken($user);
     }

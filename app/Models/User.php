@@ -21,6 +21,8 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         'surname',
         'email',
         'password',
+        'email_verified_at',
+        'provider_id',
     ];
 
     protected $hidden = [
@@ -33,7 +35,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
     public function hops(): HasMany
     {
-        // SELECT * FROM 'hops' WHERE 'user_id' = *current_user*
         return $this->hasMany(Hop::class);
     }
 
