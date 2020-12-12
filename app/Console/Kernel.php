@@ -42,13 +42,19 @@ class Kernel extends ConsoleKernel
 
     private function checkUserIngredients($user)
     {
-        $ingredients = $user->hops;
+        $this->checkIngredientType($user->hops);
+        $this->checkIngredientType($user->yeasts);
+        $this->checkIngredientType($user->fermentables);
+        $this->checkIngredientType($user->extras);
+    }
 
+    private function checkIngredientType($ingredients)
+    {
         foreach ($ingredients as $ingredient)
         {
             $isExpired = $this->checkIfInExpiringRange($ingredient);
 
-            if($isExpired) $user->notify(
+            if($isExpired) User::find($ingredient->user_id)->notify(
                 new ExpiringIngredients($ingredient->name, $ingredient->expiration_date->format('Y-m-d'))
             );
         }
