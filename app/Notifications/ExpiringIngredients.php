@@ -31,7 +31,7 @@ class ExpiringIngredients extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
@@ -57,7 +57,8 @@ class ExpiringIngredients extends Notification
     public function toDatabase($notifiable): array
     {
         return [
-            //
+            'Ingredient' => 'ingredientsName',
+            'Message' => ' is expiring.'
         ];
     }
 }

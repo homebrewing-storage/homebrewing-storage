@@ -18,13 +18,14 @@ class IngredientExpiration extends Model
         'id',
         'user_id',
         'type',
-        'notifiable',
+        // 'notifiable_type',
         'data',
         'read_at'
     ];
 
     protected $casts = [
-        'data' => 'array'
+        'id' => 'string',
+        'data' => 'array',
     ];
 
     public function user(): belongsTo
