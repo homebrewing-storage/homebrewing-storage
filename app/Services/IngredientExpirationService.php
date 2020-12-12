@@ -13,8 +13,6 @@ class IngredientExpirationService
     public function getNotifications()
     {
         $user = Auth::user();
-
-        $user->notify(new ExpiringIngredients());
         return NotificationResource::collection($user->notifications);
     }
 

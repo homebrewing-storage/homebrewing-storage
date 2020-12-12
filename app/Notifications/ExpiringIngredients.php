@@ -12,15 +12,17 @@ use Illuminate\Notifications\Notification;
 class ExpiringIngredients extends Notification
 {
     use Queueable;
-
+    protected $ingredientsName;
+    protected $ingredientsDate;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($ingredientsName, $ingredientsDate)
     {
-        //
+        $this->ingredientsName = $ingredientsName;
+        $this->ingredientsDate = $ingredientsDate;
     }
 
     /**
@@ -57,8 +59,9 @@ class ExpiringIngredients extends Notification
     public function toDatabase($notifiable): array
     {
         return [
-            'Ingredient' => 'ingredientsName',
-            'Message' => ' is expiring.'
+            'Ingredient' => $this->ingredientsName,
+            'Message' => ' will be expired on ',
+            'Date' => $this->ingredientsDate
         ];
     }
 }
