@@ -1,85 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserSettingsFormRequest;
+use App\Http\Resources\UserSettingsResource;
 use App\Models\UserSettings;
+use App\Services\UserSettingsService;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
 class UserSettingsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function show(UserSettingsService $settingsService): JsonResource
     {
-        //
+        $userSettings = $settingsService->showSettings();
+        return response()->json(new UserSettingsResource($userSettings));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function update(UserSettingsFormRequest $request, UserSettingsService $settingsService)
     {
-        //
+        $dataRequest = $this->getDataRequest($request);
+        $userSettings = $settingsService->update($dataRequest);
+        return response()->json(new UserSettingsResource($userSettings), Response::HTTP_CREATED);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    private function getDataRequest(Request $request): array
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\UserSettings  $userSettings
-     * @return \Illuminate\Http\Response
-     */
-    public function show(UserSettings $userSettings)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\UserSettings  $userSettings
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserSettings $userSettings)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\UserSettings  $userSettings
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, UserSettings $userSettings)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\UserSettings  $userSettings
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(UserSettings $userSettings)
-    {
-        //
+        return $request->only('reminder', 'email', 'hop', 'yeast', 'fermentable', 'extra');
     }
 }

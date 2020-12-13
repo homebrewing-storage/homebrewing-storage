@@ -83,4 +83,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
     Route::put('notifications/{notification}', [IngredientExpirationController::class, 'update']);
 
     Route::put('settings', [UserSettingsController::class, 'update']);
+    Route::get('settings', [UserSettingsController::class, 'show']);
 });
