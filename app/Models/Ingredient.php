@@ -17,4 +17,9 @@ abstract class Ingredient extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function notificaion(): BelongsTo
+    {
+        return $this->belongsTo(IngredientExpiration::class);
+    }
 }

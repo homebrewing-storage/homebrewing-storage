@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\IngredientExpiration;
 use App\Services\IngredientExpirationService;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\JsonResponse;
 
 class IngredientExpirationController extends Controller
@@ -13,19 +14,19 @@ class IngredientExpirationController extends Controller
     public function index(IngredientExpirationService $expirationService): JsonResponse
     {
         $notifications = $expirationService->getNotifications();
-        return response()->json($notifications, 200);
+        return response()->json($notifications);
     }
 
     public function destroy(IngredientExpiration $notification, IngredientExpirationService $expirationService): JsonResponse
     {
         $deleted = $expirationService->deleteNotification($notification);
-        return response()->json($deleted, 204);
+        return response()->json($deleted, Response::HTTP_NO_CONTENT);
     }
 
     public function update(IngredientExpiration $notification, IngredientExpirationService $expirationService): JsonResponse
     {
         $read = $expirationService->readNotifications($notification);
 
-        return response()->json($read, 201);
+        return response()->json($read, Response::HTTP_CREATED);
     }
 }

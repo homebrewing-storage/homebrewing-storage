@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\IngredientExpirationController;
+use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\Auth\{
     AuthenticationController,
     EmailVerificationController,
@@ -80,4 +81,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
     Route::get('notifications', [IngredientExpirationController::class, 'index']);
     Route::delete('notifications/{notification}', [IngredientExpirationController::class, 'destroy']);
     Route::put('notifications/{notification}', [IngredientExpirationController::class, 'update']);
+
+    Route::put('settings', [UserSettingsController::class, 'update']);
 });

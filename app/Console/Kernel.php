@@ -54,9 +54,12 @@ class Kernel extends ConsoleKernel
         {
             $isExpired = $this->checkIfInExpiringRange($ingredient);
 
-            if($isExpired) User::find($ingredient->user_id)->notify(
-                new ExpiringIngredients($ingredient->name, $ingredient->expiration_date->format('Y-m-d'))
-            );
+            if($isExpired)
+            {
+                User::find($ingredient->user_id)->notify(
+                    new ExpiringIngredients($ingredient->name, $ingredient->expiration_date->format('Y-m-d'))
+                );
+            }
         }
     }
 
