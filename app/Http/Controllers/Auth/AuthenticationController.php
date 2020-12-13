@@ -45,15 +45,39 @@ class AuthenticationController extends Controller
         $authenticationServices->logout($request);
     }
 
-    public function redirectGithub(): RedirectResponse
+    public function redirectToGithub(): RedirectResponse
     {
         return Socialite::driver('github')->redirect();
     }
 
-    public function callbackGithub(AuthenticationServices $authenticationServices): JsonResponse
+    public function callbackToGithub(AuthenticationServices $authenticationServices): JsonResponse
     {
         $user = Socialite::driver('github')->stateless()->user();
-        $token = $authenticationServices->loginSocialMedia($user);
+        $token = $authenticationServices->loginSocialMedia($user, 'github');
+        return response()->json(['token' => $token]);
+    }
+
+    public function redirectToGoogle(): RedirectResponse
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function callbackToGoogle(AuthenticationServices $authenticationServices): JsonResponse
+    {
+        $user = Socialite::driver('google')->stateless()->user();
+        $token = $authenticationServices->loginSocialMedia($user, 'google');
+        return response()->json(['token' => $token]);
+    }
+
+    public function redirectToFacebook(): RedirectResponse
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    public function callbackToFacebook(AuthenticationServices $authenticationServices): JsonResponse
+    {
+        $user = Socialite::driver('facebook')->stateless()->user();
+        $token = $authenticationServices->loginSocialMedia($user, 'facebook');
         return response()->json(['token' => $token]);
     }
 }
