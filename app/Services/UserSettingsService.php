@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserSettingsService
 {
-    public function showSettings(): array
+    public function showSettings(): UserSettings
     {
         return Auth::user()->userSettings;
     }

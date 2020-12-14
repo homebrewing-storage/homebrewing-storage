@@ -40,39 +40,47 @@ class Kernel extends ConsoleKernel
         require base_path('routes/console.php');
     }
 
-    private function checkUserIngredients($user)
+    private function checkUserIngredients($user): void
     {
-        $this->checkIngredientType($user->hops);
-        $this->checkIngredientType($user->yeasts);
-        $this->checkIngredientType($user->fermentables);
-        $this->checkIngredientType($user->extras);
+        if($user->userSettings->hop)        $this->checkIngredientType($user->hops);
+        if($user->userSettings->yeast)      $this->checkIngredientType($user->yeasts);
+        if($user->userSettings->fermentable)$this->checkIngredientType($user->fermentables);
+        if($user->userSettings->extra)      $this->checkIngredientType($user->extras);
     }
 
-    private function checkIngredientType($ingredients)
+    private function checkIngredientType($ingredients): void
     {
         foreach ($ingredients as $ingredient)
         {
-            $isExpired = $this->checkIfInExpiringRange($ingredient);
+            $user = User::find($ingredient->user_id);
+            $userReminderRange = $user->userSettings->reminder;
+
+            $isExpired = $this->checkIfInExpiringRange($ingredient, $userReminderRange);
 
             if($isExpired)
             {
-                User::find($ingredient->user_id)->notify(
-                    new ExpiringIngredients($ingredient->name, $ingredient->expiration_date->format('Y-m-d'))
-                );
+                // check user settings to determine whether to send notif and waht chnnel
+                $this->notifyUser($user, $ingredient);
             }
         }
     }
 
-    private function checkIfInExpiringRange($ingredient): bool
+    private function checkIfInExpiringRange($ingredient, $userReminderRange): bool
     {
         $expirationDate = $ingredient->expiration_date;
         $today = Carbon::now();
 
-        if(($today < $expirationDate) && ($today->addDays(7) >= $expirationDate))
+        if(($today < $expirationDate) && ($today->addDays($userReminderRange) >= $expirationDate))
         {
             return true;
         }
         return false;
     }
 
+    private function notifyUser($user, $ingredient)
+    {
+        $user->notify(
+            new ExpiringIngredients($ingredient->name, $ingredient->expiration_date->format('Y-m-d'), $user->userSettings)
+        );
+    }
 }

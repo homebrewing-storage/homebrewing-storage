@@ -15,34 +15,24 @@ class ExpiringIngredients extends Notification
     use Queueable;
     protected $ingredientsName;
     protected $ingredientsDate;
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct($ingredientsName, $ingredientsDate)
+    protected $userSettings;
+
+    public function __construct($ingredientsName, $ingredientsDate, $userSettings)
     {
         $this->ingredientsName = $ingredientsName;
         $this->ingredientsDate = $ingredientsDate;
+        $this->userSettings = $userSettings;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function via($notifiable): array
     {
-        return ['database']; // 'mail'
+        if($this->userSettings->email === 0)
+        {
+            return ['database'];
+        }
+        return ['mail', 'database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
@@ -51,12 +41,6 @@ class ExpiringIngredients extends Notification
             ->line('Thank you for using our application!');
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function toDatabase($notifiable): array
     {
         return [

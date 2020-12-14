@@ -6,15 +6,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserSettingsFormRequest;
 use App\Http\Resources\UserSettingsResource;
-use App\Models\UserSettings;
 use App\Services\UserSettingsService;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
 class UserSettingsController extends Controller
 {
-    public function show(UserSettingsService $settingsService): JsonResource
+    public function show(UserSettingsService $settingsService): JsonResponse
     {
         $userSettings = $settingsService->showSettings();
         return response()->json(new UserSettingsResource($userSettings));
