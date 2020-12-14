@@ -18,7 +18,7 @@ class IngredientExpirationService
 
     public function deleteNotification($notification): void
     {
-        return $notification->delete();
+        $notification->delete();
     }
 
     public function readNotifications($notification): bool

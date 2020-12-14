@@ -19,8 +19,8 @@ class IngredientExpirationController extends Controller
 
     public function destroy(IngredientExpiration $notification, IngredientExpirationService $expirationService): JsonResponse
     {
-        $deleted = $expirationService->deleteNotification($notification);
-        return response()->json($deleted, Response::HTTP_NO_CONTENT);
+        $expirationService->deleteNotification($notification);
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
     public function update(IngredientExpiration $notification, IngredientExpirationService $expirationService): JsonResponse
