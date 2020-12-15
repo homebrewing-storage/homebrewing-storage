@@ -59,7 +59,6 @@ class Kernel extends ConsoleKernel
 
             if($isExpired)
             {
-                // check user settings to determine whether to send notif and waht chnnel
                 $this->notifyUser($user, $ingredient);
             }
         }

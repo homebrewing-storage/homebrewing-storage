@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\IngredientExpirationController;
 use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\Auth\{
@@ -84,4 +85,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
 
     Route::put('settings', [UserSettingsController::class, 'update']);
     Route::get('settings', [UserSettingsController::class, 'show']);
+
+    Route::post('change-password', [ChangePasswordController::class, 'update']);
 });

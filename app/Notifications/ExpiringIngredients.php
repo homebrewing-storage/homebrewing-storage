@@ -46,7 +46,7 @@ class ExpiringIngredients extends Notification
         return [
             'Ingredient' => $this->ingredientsName,
             'Message' => ' will be expired on ',
-            'Date' => $this->ingredientsDate
+            'Date' => $this->ingredientsDate,
         ];
     }
 }
