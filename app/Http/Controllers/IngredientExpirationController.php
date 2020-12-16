@@ -17,6 +17,12 @@ class IngredientExpirationController extends Controller
         return response()->json($notifications);
     }
 
+    public function show(IngredientExpirationService $expirationService): JsonResponse
+    {
+        $unreadCount = $expirationService->getUnread();
+        return response()->json($unreadCount);
+    }
+
     public function destroy(IngredientExpiration $notification, IngredientExpirationService $expirationService): JsonResponse
     {
         $expirationService->deleteNotification($notification);

@@ -80,6 +80,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
     Route::delete('extras/{extra}', [ExtraController::class, 'destroy']);
 
     Route::get('notifications', [IngredientExpirationController::class, 'index']);
+    Route::get('unreadNotifications', [IngredientExpirationController::class, 'show']);
     Route::delete('notifications/{notification}', [IngredientExpirationController::class, 'destroy']);
     Route::put('notifications/{notification}', [IngredientExpirationController::class, 'update']);
 
