@@ -48,7 +48,11 @@ class AuthenticationServices
     {
         $user = User::query()->firstWhere('email', $socialiteUser->getEmail());
         if ($user === null) {
-            list($name, $surname) = explode(" ", $socialiteUser->getName());
+            $username = $socialiteUser->getName();
+
+            if(!$username) $username = $socialiteUser->getNickname();
+
+            list($name, $surname) = explode(" ", "$username ");
             $user = new User([
                 'name' => $name,
                 'surname' => $surname,
