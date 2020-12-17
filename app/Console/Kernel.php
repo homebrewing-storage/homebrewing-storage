@@ -52,7 +52,7 @@ class Kernel extends ConsoleKernel
     {
         foreach ($ingredients as $ingredient)
         {
-            $user = User::find($ingredient->user_id);
+            $user = $ingredient->user;
             $userReminderRange = $user->userSettings->reminder;
 
             $isExpired = $this->checkIfInExpiringRange($ingredient, $userReminderRange);

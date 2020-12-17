@@ -16,10 +16,10 @@ class IngredientExpirationService
         return NotificationResource::collection($user->notifications);
     }
 
-    public function getUnread()
+    public function getUnread(): int
     {
         $user = Auth::user();
-        return count(NotificationResource::collection($user->notifications));
+        return count(NotificationResource::collection($user->unreadNotifications));
     }
 
     public function deleteNotification($notification): void

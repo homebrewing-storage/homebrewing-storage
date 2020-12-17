@@ -6,7 +6,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class IngredientExpiration extends Model
 {
@@ -29,10 +28,5 @@ class IngredientExpiration extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function ingredient(): HasOne
-    {
-        return $this->hasOne(Ingredient::class);
     }
 }
