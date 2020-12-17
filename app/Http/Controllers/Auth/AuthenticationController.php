@@ -10,6 +10,7 @@ use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Services\AuthenticationServices;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticationController extends Controller
 {
@@ -20,7 +21,7 @@ class AuthenticationController extends Controller
         return response()->json([
             'message' => 'User registered. Sending The Verification Email',
             'token' => $token,
-        ], 201);
+        ], Response::HTTP_CREATED);
     }
 
     public function login(LoginUserRequest $request, AuthenticationServices $authenticationServices): JsonResponse
