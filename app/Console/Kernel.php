@@ -18,20 +18,17 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule): void
     {
-        while(true)
-        {
-            foreach (User::all() as $user)
-            {
+        while (true) {
+            foreach (User::all() as $user) {
                 $this->checkUserIngredients($user);
             }
             echo "Done" . PHP_EOL;
             sleep(5);
         }
 
-        $schedule->call(function ()
-        {
-            //
-        })->daily();
+//        $schedule->call(function () {
+//            //
+//        })->daily();
     }
 
     protected function commands(): void
@@ -42,23 +39,21 @@ class Kernel extends ConsoleKernel
 
     private function checkUserIngredients($user): void
     {
-        if($user->userSettings->hop)        $this->checkIngredientType($user->hops);
-        if($user->userSettings->yeast)      $this->checkIngredientType($user->yeasts);
-        if($user->userSettings->fermentable)$this->checkIngredientType($user->fermentables);
-        if($user->userSettings->extra)      $this->checkIngredientType($user->extras);
+        if ($user->userSettings->hop) $this->checkIngredientType($user->hops);
+        if ($user->userSettings->yeast) $this->checkIngredientType($user->yeasts);
+        if ($user->userSettings->fermentable) $this->checkIngredientType($user->fermentables);
+        if ($user->userSettings->extra) $this->checkIngredientType($user->extras);
     }
 
     private function checkIngredientType($ingredients): void
     {
-        foreach ($ingredients as $ingredient)
-        {
+        foreach ($ingredients as $ingredient) {
             $user = $ingredient->user;
             $userReminderRange = $user->userSettings->reminder;
 
             $isExpired = $this->checkIfInExpiringRange($ingredient, $userReminderRange);
 
-            if($isExpired)
-            {
+            if ($isExpired) {
                 $this->notifyUser($user, $ingredient);
             }
         }
@@ -69,8 +64,7 @@ class Kernel extends ConsoleKernel
         $expirationDate = $ingredient->expiration_date;
         $today = Carbon::now();
 
-        if(($today < $expirationDate) && ($today->addDays($userReminderRange) >= $expirationDate))
-        {
+        if (($today < $expirationDate) && ($today->addDays($userReminderRange) >= $expirationDate)) {
             return true;
         }
         return false;

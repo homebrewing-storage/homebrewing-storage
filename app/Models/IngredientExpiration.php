@@ -15,7 +15,6 @@ class IngredientExpiration extends Model
         'id',
         'user_id',
         'type',
-        // 'notifiable_type',
         'data',
         'read_at'
     ];
