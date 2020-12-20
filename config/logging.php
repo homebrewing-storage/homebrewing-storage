@@ -12,8 +12,15 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['database', 'single'],
             'ignore_exceptions' => false,
+        ],
+
+        'database' => [
+            'driver' => 'custom',
+            'path' => storage_path('logs/laravel.log'),
+            'via' => App\Logging\MySQLCustomLogger::class,
+            'level' => 'info',
         ],
 
         'single' => [
