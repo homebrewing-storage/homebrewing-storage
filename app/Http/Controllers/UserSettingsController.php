@@ -10,6 +10,7 @@ use App\Services\UserSettingsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserSettingsController extends Controller
 {
@@ -23,6 +24,11 @@ class UserSettingsController extends Controller
     {
         $dataRequest = $this->getDataRequest($request);
         $userSettings = $settingsService->update($dataRequest);
+
+        Log::channel('database')->info("Successfully updated settings.", [
+            "Auth", "Settings change", "Success"
+        ]);
+
         return response()->json(new UserSettingsResource($userSettings), Response::HTTP_CREATED);
     }
 
