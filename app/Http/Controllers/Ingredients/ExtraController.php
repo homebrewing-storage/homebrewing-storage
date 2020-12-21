@@ -14,6 +14,7 @@ use App\Models\ExtraType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExtraController extends Controller
@@ -37,7 +38,13 @@ class ExtraController extends Controller
         $userId = $request->user()->id;
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $extra = new Extra($dataRequest);
+
+        Log::channel('database')->info("Successfully added new ingredient.", [
+            "Auth", "Added ingredient", "Extra", $dataRequest['name'] ,"Success"
+        ]);
+
         $extra->save();
+
         return response()->json(new ExtraResource($extra), Response::HTTP_CREATED);
     }
 

@@ -10,6 +10,7 @@ use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Services\AuthenticationServices;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticationController extends Controller
@@ -28,11 +29,15 @@ class AuthenticationController extends Controller
     {
         $formCredentials = $request->only('email', 'password');
         $token = $authenticationServices->login($formCredentials);
+
+        Log::channel('database')->info("Successfully logged in.", ["Auth", "Success"]);
+
         return response()->json(['token' => $token]);
     }
 
     public function logout(Request $request, AuthenticationServices $authenticationServices): void
     {
+        Log::channel('database')->info("Successfully logged out.", ["Auth", "Success"]);
         $authenticationServices->logout($request);
     }
 }

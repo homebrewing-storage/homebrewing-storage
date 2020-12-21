@@ -17,7 +17,6 @@ use App\Http\Controllers\Ingredients\{
     ExtraController
 };
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 // Authentication
@@ -91,6 +90,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
     Route::post('change-password', [ChangePasswordController::class, 'update']);
 
     Route::get('log', function () {
-        Log::channel('database')->info("This is an test DEBUG log event", ["asd", "vsd"]);
+
     });
 });
