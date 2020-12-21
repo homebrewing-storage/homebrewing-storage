@@ -68,6 +68,11 @@ class ExtraController extends Controller
     public function destroy(Extra $extra): JsonResponse
     {
         $extra->delete();
+
+        Log::channel('database')->info("Successfully deleted ingredient.", [
+            "Auth", "Deleted ingredient", "Extra", $extra['name'], "Success"
+        ]);
+
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 

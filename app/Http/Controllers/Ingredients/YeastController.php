@@ -67,6 +67,11 @@ class YeastController extends Controller
     public function destroy(Yeast $yeast): JsonResponse
     {
         $yeast->delete();
+
+        Log::channel('database')->info("Successfully deleted ingredient.", [
+            "Auth", "Deleted ingredient", "Extra", $yeast['name'], "Success"
+        ]);
+
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 

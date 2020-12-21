@@ -67,6 +67,11 @@ class FermentableController extends Controller
     public function destroy(Fermentable $fermentable): JsonResponse
     {
         $fermentable->delete();
+
+        Log::channel('database')->info("Successfully deleted ingredient.", [
+            "Auth", "Deleted ingredient", "Fermentable", $fermentable['name'], "Success"
+        ]);
+
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 

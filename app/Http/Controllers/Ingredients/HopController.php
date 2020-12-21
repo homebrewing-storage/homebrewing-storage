@@ -65,6 +65,11 @@ class HopController extends Controller
     public function destroy(Hop $hop): JsonResponse
     {
         $hop->delete();
+
+        Log::channel('database')->info("Successfully deleted ingredient.", [
+            "Auth", "Deleted ingredient", "Hop", $hop['name'], "Success"
+        ]);
+
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
