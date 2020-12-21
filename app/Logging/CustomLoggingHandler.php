@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Logging;
 
 
+use App\Exceptions\Auth\UnauthorizedException;
 use App\Models\UserLogs;
 use Illuminate\Support\Facades\Auth;
 use Monolog\Handler\AbstractProcessingHandler;
@@ -23,10 +24,21 @@ class CustomLoggingHandler extends AbstractProcessingHandler
         parent::__construct($level, $bubble);
     }
 
+    /**
+     * @param array $record
+     * @throws UnauthorizedException
+     */
     protected function write(array $record): void
     {
-        $record = Arr::add($record, 'user_id', Auth::user()->id);
-        $log = new UserLogs($record);
-        $log->save();
+        $user = Auth::user();
+
+        if(!$user)
+        {
+            throw new UnauthorizedException();
+        } else {
+            $record = Arr::add($record, 'user_id', $user->id);
+            $log = new UserLogs($record);
+            $log->save();
+        }
     }
 }

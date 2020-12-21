@@ -9,7 +9,6 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class AuthenticationServices
 {
@@ -36,7 +35,6 @@ class AuthenticationServices
      */
     public function login(array $formCredentials): string
     {
-        // Log::info("msg");
         $user = User::query()->firstWhere('email', $formCredentials['email']);
         if (!$user || !$this->hash->check($formCredentials['password'], $user->password)) {
             throw new UnauthorizedException();
