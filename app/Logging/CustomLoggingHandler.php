@@ -24,21 +24,16 @@ class CustomLoggingHandler extends AbstractProcessingHandler
         parent::__construct($level, $bubble);
     }
 
-    /**
-     * @param array $record
-     * @throws UnauthorizedException
-     */
     protected function write(array $record): void
     {
-        $user = Auth::user();
-
-        if(!$user)
+        if((in_array("Auth", $record['context'])) && (in_array("Log", $record['context'])))
         {
-            throw new UnauthorizedException();
+            $record = Arr::add($record, 'user_id', $record['context'][2]);
         } else {
+            $user = Auth::user();
             $record = Arr::add($record, 'user_id', $user->id);
-            $log = new UserLogs($record);
-            $log->save();
         }
+        $log = new UserLogs($record);
+        $log->save();
     }
 }

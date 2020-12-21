@@ -42,13 +42,21 @@ class AuthenticationServices
         return $this->createToken($user);
     }
 
-    public function logout(Request $request): void
+    public function logout(Request $request): int
     {
-        $request->user()->currentAccessToken()->delete();
+        $user = $request->user();
+        $user->currentAccessToken()->delete();
+
+        return $user->id;
     }
 
     private function createToken(User $user): string
     {
         return $user->createToken($user->email)->plainTextToken;
+    }
+
+    public function getUserId(string $email): int
+    {
+        return User::query()->firstWhere('email', $email)->id;
     }
 }

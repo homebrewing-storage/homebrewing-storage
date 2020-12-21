@@ -89,7 +89,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
 
     Route::post('change-password', [ChangePasswordController::class, 'update']);
 
-    Route::get('log', function () {
-
-    });
+    Route::get('logs', );
 });
