@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\IngredientExpirationController;
+use App\Http\Controllers\UserLogsController;
 use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\Auth\{
     AuthenticationController,
@@ -89,5 +90,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
 
     Route::post('change-password', [ChangePasswordController::class, 'update']);
 
-    Route::get('logs', );
+    Route::get('logs', [UserLogsController::class, 'index']);
 });

@@ -41,7 +41,7 @@ class YeastController extends Controller
         $yeast->save();
 
         Log::channel('database')->info("Successfully added new ingredient.", [
-            "Auth", "Added ingredient", "Yeast", $dataRequest['name'], "Success"
+            "Auth", "Ingredient", "Added ingredient", "Yeast", $dataRequest['name'], "Success"
         ]);
 
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
@@ -58,7 +58,7 @@ class YeastController extends Controller
         $yeast->update($dataRequest);
 
         Log::channel('database')->info("Successfully updated new ingredient.", [
-            "Auth", "Updated ingredient", "Yeast", $dataRequest['name'], "Success"
+            "Auth", "Ingredient", "Updated ingredient", "Yeast", $dataRequest['name'], "Success"
         ]);
 
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
@@ -69,7 +69,7 @@ class YeastController extends Controller
         $yeast->delete();
 
         Log::channel('database')->info("Successfully deleted ingredient.", [
-            "Auth", "Deleted ingredient", "Extra", $yeast['name'], "Success"
+            "Auth", "Ingredient", "Deleted ingredient", "Extra", $yeast['name'], "Success"
         ]);
 
         return response()->json(null, Response::HTTP_NO_CONTENT);

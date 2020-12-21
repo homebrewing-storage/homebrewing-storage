@@ -39,7 +39,7 @@ class HopController extends Controller
         $hop->save();
 
         Log::channel('database')->info("Successfully added new ingredient.", [
-            "Auth", "Added ingredient", "Hop", $dataRequest['name'], "Success"
+            "Auth", "Ingredient", "Added ingredient", "Hop", $dataRequest['name'], "Success"
         ]);
 
         return response()->json(new HopResource($hop), Response::HTTP_CREATED);
@@ -56,7 +56,7 @@ class HopController extends Controller
         $hop->update($dataRequest);
 
         Log::channel('database')->info("Successfully updated new ingredient.", [
-            "Auth", "Updated ingredient", "Hop", $dataRequest['name'], "Success"
+            "Auth", "Ingredient", "Updated ingredient", "Hop", $dataRequest['name'], "Success"
         ]);
 
         return response()->json(new HopResource($hop), Response::HTTP_CREATED);
@@ -67,7 +67,7 @@ class HopController extends Controller
         $hop->delete();
 
         Log::channel('database')->info("Successfully deleted ingredient.", [
-            "Auth", "Deleted ingredient", "Hop", $hop['name'], "Success"
+            "Auth", "Ingredient", "Deleted ingredient", "Hop", $hop['name'], "Success"
         ]);
 
         return response()->json(null, Response::HTTP_NO_CONTENT);

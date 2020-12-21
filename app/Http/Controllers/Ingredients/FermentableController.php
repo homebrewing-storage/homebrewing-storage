@@ -41,7 +41,7 @@ class FermentableController extends Controller
         $fermentable->save();
 
         Log::channel('database')->info("Successfully added new ingredient.", [
-            "Auth", "Added ingredient", "Fermentable", $dataRequest['name'], "Success"
+            "Auth", "Ingredient", "Added ingredient", "Fermentable", $dataRequest['name'], "Success"
         ]);
 
         return response()->json(new FermentableResource($fermentable), Response::HTTP_CREATED);
@@ -58,7 +58,7 @@ class FermentableController extends Controller
         $fermentable->update($dataRequest);
 
         Log::channel('database')->info("Successfully updated new ingredient.", [
-            "Auth", "Updated ingredient", "Fermentable", $dataRequest['name'], "Success"
+            "Auth", "Ingredient", "Updated ingredient", "Fermentable", $dataRequest['name'], "Success"
         ]);
 
         return response()->json(new FermentableResource($fermentable), Response::HTTP_CREATED);
@@ -69,7 +69,7 @@ class FermentableController extends Controller
         $fermentable->delete();
 
         Log::channel('database')->info("Successfully deleted ingredient.", [
-            "Auth", "Deleted ingredient", "Fermentable", $fermentable['name'], "Success"
+            "Auth", "Ingredient", "Deleted ingredient", "Fermentable", $fermentable['name'], "Success"
         ]);
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
