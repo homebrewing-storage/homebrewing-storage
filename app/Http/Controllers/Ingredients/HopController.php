@@ -54,6 +54,11 @@ class HopController extends Controller
     {
         $dataRequest = $this->getDataRequest($request);
         $hop->update($dataRequest);
+
+        Log::channel('database')->info("Successfully updated new ingredient.", [
+            "Auth", "Updated ingredient", "Hop", $dataRequest['name'], "Success"
+        ]);
+
         return response()->json(new HopResource($hop), Response::HTTP_CREATED);
     }
 

@@ -57,6 +57,11 @@ class ExtraController extends Controller
     {
         $dataRequest = $this->getDataRequest($request);
         $extra->update($dataRequest);
+
+        Log::channel('database')->info("Successfully updated new ingredient.", [
+            "Auth", "Updated ingredient", "Extra", $dataRequest['name'], "Success"
+        ]);
+
         return response()->json(new ExtraResource($extra), Response::HTTP_CREATED);
     }
 

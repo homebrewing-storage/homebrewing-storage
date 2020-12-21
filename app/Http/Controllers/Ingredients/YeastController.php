@@ -56,6 +56,11 @@ class YeastController extends Controller
     {
         $dataRequest = $this->getDataRequest($request);
         $yeast->update($dataRequest);
+
+        Log::channel('database')->info("Successfully updated new ingredient.", [
+            "Auth", "Updated ingredient", "Yeast", $dataRequest['name'], "Success"
+        ]);
+
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
     }
 

@@ -56,6 +56,11 @@ class FermentableController extends Controller
     {
         $dataRequest = $this->getDataRequest($request);
         $fermentable->update($dataRequest);
+
+        Log::channel('database')->info("Successfully updated new ingredient.", [
+            "Auth", "Updated ingredient", "Fermentable", $dataRequest['name'], "Success"
+        ]);
+
         return response()->json(new FermentableResource($fermentable), Response::HTTP_CREATED);
     }
 
