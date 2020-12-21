@@ -12,6 +12,7 @@ use App\Models\Hop;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class HopController extends Controller
@@ -36,6 +37,11 @@ class HopController extends Controller
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $hop = new Hop($dataRequest);
         $hop->save();
+
+        Log::channel('database')->info("Successfully added new ingredient.", [
+            "Auth", "Added ingredient", "Hop", $dataRequest['name'], "Success"
+        ]);
+
         return response()->json(new HopResource($hop), Response::HTTP_CREATED);
     }
 

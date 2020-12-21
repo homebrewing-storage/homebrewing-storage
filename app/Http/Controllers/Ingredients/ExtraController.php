@@ -40,7 +40,7 @@ class ExtraController extends Controller
         $extra = new Extra($dataRequest);
 
         Log::channel('database')->info("Successfully added new ingredient.", [
-            "Auth", "Added ingredient", "Extra", $dataRequest['name'] ,"Success"
+            "Auth", "Added ingredient", "Extra", $dataRequest['name'], "Success"
         ]);
 
         $extra->save();

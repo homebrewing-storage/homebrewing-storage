@@ -14,6 +14,7 @@ use App\Models\YeastType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class YeastController extends Controller
@@ -38,6 +39,11 @@ class YeastController extends Controller
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $yeast = new Yeast($dataRequest);
         $yeast->save();
+
+        Log::channel('database')->info("Successfully added new ingredient.", [
+            "Auth", "Added ingredient", "Yeast", $dataRequest['name'], "Success"
+        ]);
+
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
     }
 
