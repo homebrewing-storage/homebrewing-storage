@@ -18,9 +18,14 @@ return [
 
         'database' => [
             'driver' => 'custom',
-            'path' => storage_path('logs/laravel.log'),
-            'via' => App\Logging\MySQLCustomLogger::class,
-            'level' => 'info',
+            'via' => App\Logging\LogToDbHandler::class,
+            'model' => App\Models\UserLogs::class,
+            'level' => env('APP_LOG_LEVEL', 'debug'),
+            'name' => 'User actions logs',
+            'connection' => 'default',
+            'collection' => 'user_logs',
+            'max_records' => false,
+            'max_hours' => false,
         ],
 
         'single' => [

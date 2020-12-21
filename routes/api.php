@@ -89,9 +89,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
     Route::get('settings', [UserSettingsController::class, 'show']);
 
     Route::post('change-password', [ChangePasswordController::class, 'update']);
-});
 
-Route::get('log', function () {
-
-    Log::channel('database')->info("Test", ['my-string' => 'log me', "run"]);
+    Route::get('log', function () {
+        Log::channel('database')->info("This is an test DEBUG log event", ["asd", "vsd"]);
+    });
 });
