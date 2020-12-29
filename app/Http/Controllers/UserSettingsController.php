@@ -26,7 +26,7 @@ class UserSettingsController extends Controller
         $userSettings = $settingsService->update($dataRequest);
 
         Log::channel('database')->info("Successfully updated settings.", [
-            "Auth", "Settings change", "Success"
+            "Auth", "Settings change", " ", " ", "Success"
         ]);
 
         return response()->json(new UserSettingsResource($userSettings), Response::HTTP_CREATED);

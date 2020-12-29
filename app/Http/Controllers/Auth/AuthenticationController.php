@@ -33,7 +33,9 @@ class AuthenticationController extends Controller
 
         $userId = $authenticationServices->getUserId($formCredentials['email']);
 
-        Log::channel('database')->info("Successfully logged in.", ["Auth", "Log", $userId, "Success"]);
+        Log::channel('database')->info("Successfully logged in.", [
+            "Auth", "Log", $userId, " ", " ", "Success"
+        ]);
 
         return response()->json(['token' => $token]);
     }
@@ -41,6 +43,8 @@ class AuthenticationController extends Controller
     public function logout(Request $request, AuthenticationServices $authenticationServices): void
     {
         $userId = $authenticationServices->logout($request);
-        Log::channel('database')->info("Successfully logged out.", ["Auth", "Log", $userId, "Success"]);
+        Log::channel('database')->info("Successfully logged out.", [
+            "Auth", "Log", $userId, " ", " ", "Success"
+        ]);
     }
 }

@@ -17,7 +17,7 @@ class ChangePasswordController extends Controller
         $changePasswordService->update($request);
 
         Log::channel('database')->info("Successfully updated password.", [
-            "Auth", "Credential change", "Password", "Success"
+            "Auth", "Credential change", "Password", " ", "Success"
         ]);
 
         return response()->json(Response::HTTP_CREATED);

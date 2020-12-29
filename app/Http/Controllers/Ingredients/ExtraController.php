@@ -40,7 +40,7 @@ class ExtraController extends Controller
         $extra = new Extra($dataRequest);
 
         Log::channel('database')->info("Successfully added new ingredient.", [
-            "Auth", "Ingredient", "Added ingredient", "Extra", $dataRequest['name'], "Success"
+            "Ingredient", "Added ingredient", "Extra", $dataRequest['name'], "Success"
         ]);
 
         $extra->save();
@@ -59,7 +59,7 @@ class ExtraController extends Controller
         $extra->update($dataRequest);
 
         Log::channel('database')->info("Successfully updated new ingredient.", [
-            "Auth", "Ingredient", "Updated ingredient", "Extra", $dataRequest['name'], "Success"
+            "Ingredient", "Updated ingredient", "Extra", $dataRequest['name'], "Success"
         ]);
 
         return response()->json(new ExtraResource($extra), Response::HTTP_CREATED);
@@ -70,7 +70,7 @@ class ExtraController extends Controller
         $extra->delete();
 
         Log::channel('database')->info("Successfully deleted ingredient.", [
-            "Auth", "Ingredient", "Deleted ingredient", "Extra", $extra['name'], "Success"
+            "Ingredient", "Deleted ingredient", "Extra", $extra['name'], "Success"
         ]);
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
