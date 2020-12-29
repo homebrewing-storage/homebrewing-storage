@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Logging\LogToDbHandler;
+use App\Models\UserLogs;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -18,8 +20,8 @@ return [
 
         'database' => [
             'driver' => 'custom',
-            'via' => App\Logging\LogToDbHandler::class,
-            'model' => App\Models\UserLogs::class,
+            'via' => LogToDbHandler::class,
+            'model' => UserLogs::class,
             'level' => env('APP_LOG_LEVEL', 'debug'),
             'name' => 'User actions logs',
             'connection' => 'default',

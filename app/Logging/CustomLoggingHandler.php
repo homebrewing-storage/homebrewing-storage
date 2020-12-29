@@ -14,7 +14,8 @@ use Illuminate\Support\Arr;
 class CustomLoggingHandler extends AbstractProcessingHandler
 {
     private $config;
-    function __construct(array $config,  array $processors, bool $bubble = true)
+
+    function __construct(array $config, array $processors, bool $bubble = true)
     {
 
         $this->config = $config;
@@ -30,14 +31,13 @@ class CustomLoggingHandler extends AbstractProcessingHandler
      */
     protected function write(array $record): void
     {
-        if((in_array("Auth", $record['context'])) && (in_array("Log", $record['context'])))
-        {
+        if ((in_array("Auth", $record['context'])) && (in_array("Log", $record['context']))) {
             $record = Arr::add($record, 'user_id', $record['context'][2]);
             unset($record['context'][2]);
             $record['context'] = array_values($record['context']);
         } else {
             $user = Auth::user();
-            if(!$user) {
+            if (!$user) {
                 throw new UnauthorizedException();
             }
             $record = Arr::add($record, 'user_id', $user->id);
