@@ -57,18 +57,6 @@ class AuthenticationController extends Controller
         return response()->json(['token' => $token]);
     }
 
-    public function redirectToGoogle(): RedirectResponse
-    {
-        return Socialite::driver('google')->redirect();
-    }
-
-    public function callbackToGoogle(AuthenticationServices $authenticationServices): JsonResponse
-    {
-        $user = Socialite::driver('google')->stateless()->user();
-        $token = $authenticationServices->loginSocialMedia($user, 'google');
-        return response()->json(['token' => $token]);
-    }
-
     public function redirectToFacebook(): RedirectResponse
     {
         return Socialite::driver('facebook')->redirect();
