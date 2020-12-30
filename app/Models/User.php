@@ -22,6 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         'surname',
         'email',
         'password',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -32,9 +33,13 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         'email_verified_at' => 'datetime',
     ];
 
+    public function socialAccounts(): HasMany
+    {
+        return $this->hasMany(SocialAccount::class);
+    }
+
     public function hops(): HasMany
     {
-        // SELECT * FROM 'hops' WHERE 'user_id' = *current_user*
         return $this->hasMany(Hop::class);
     }
 
