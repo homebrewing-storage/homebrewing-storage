@@ -69,7 +69,7 @@ class YeastController extends Controller
         $yeast->delete();
 
         Log::channel('database')->info("Successfully deleted ingredient.", [
-            "Ingredient", "Deleted ingredient", "Extra", $yeast['name'], "Success"
+            "Ingredient", "Deleted ingredient", "Yeast", $yeast['name'], "Success"
         ]);
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
