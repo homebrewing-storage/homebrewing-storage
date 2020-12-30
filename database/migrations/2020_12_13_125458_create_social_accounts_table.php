@@ -13,7 +13,7 @@ class CreateSocialAccountsTable extends Migration
         Schema::create('social_accounts', function (Blueprint $table) {
             $table->id();
             $table->string('provider_id')->unique();
-            $table->enum('name', ['github', 'google', 'facebook']);
+            $table->enum('name', ['github', 'facebook']);
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
