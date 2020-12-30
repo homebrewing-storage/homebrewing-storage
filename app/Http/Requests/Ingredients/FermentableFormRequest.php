@@ -4,15 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Ingredients;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 
-class FermentableFormRequest extends FormRequest
+class FermentableFormRequest extends BaseRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return [

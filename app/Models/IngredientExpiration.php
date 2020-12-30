@@ -7,10 +7,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-abstract class Ingredient extends Model
+class IngredientExpiration extends Model
 {
+    public $table = 'notifications';
+
+    protected $fillable = [
+        'id',
+        'user_id',
+        'type',
+        'data',
+        'read_at'
+    ];
+
     protected $casts = [
-        'expiration_date' => 'datetime',
+        'id' => 'string',
+        'data' => 'array',
     ];
 
     public function user(): BelongsTo

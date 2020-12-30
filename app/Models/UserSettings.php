@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-abstract class Ingredient extends Model
+class UserSettings extends Model
 {
-    protected $casts = [
-        'expiration_date' => 'datetime',
+    use HasFactory;
+
+    protected $fillable = [
+        'reminder',
+        'email',
+        'hop',
+        'yeast',
+        'fermentable',
+        'extra'
     ];
 
     public function user(): BelongsTo

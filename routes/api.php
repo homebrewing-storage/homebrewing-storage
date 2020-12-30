@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\ChangePasswordController;
+use App\Http\Controllers\IngredientExpirationController;
+use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\Auth\{
     AuthenticationController,
     EmailVerificationController,
@@ -71,4 +74,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (): void {
     Route::post('extras', [ExtraController::class, 'store']);
     Route::put('extras/{extra}', [ExtraController::class, 'update']);
     Route::delete('extras/{extra}', [ExtraController::class, 'destroy']);
+
+    Route::get('notifications', [IngredientExpirationController::class, 'index']);
+    Route::get('unreadNotifications', [IngredientExpirationController::class, 'show']);
+    Route::delete('notifications/{notification}', [IngredientExpirationController::class, 'destroy']);
+    Route::put('notifications/{notification}', [IngredientExpirationController::class, 'update']);
+
+    Route::put('settings', [UserSettingsController::class, 'update']);
+    Route::get('settings', [UserSettingsController::class, 'show']);
+
+    Route::post('change-password', [ChangePasswordController::class, 'update']);
 });
