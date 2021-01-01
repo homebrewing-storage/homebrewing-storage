@@ -42,12 +42,10 @@ class AuthenticationServices
         return $this->createToken($user);
     }
 
-    public function logout(Request $request): int
+    public function logout(Request $request): void
     {
         $user = $request->user();
         $user->currentAccessToken()->delete();
-
-        return $user->id;
     }
 
     private function createToken(User $user): string
