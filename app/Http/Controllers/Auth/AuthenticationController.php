@@ -42,10 +42,9 @@ class AuthenticationController extends Controller
 
     public function logout(Request $request, AuthenticationServices $authenticationServices): void
     {
-        $userId = Auth::user()->id;
+        $userId = $authenticationServices->logout($request);
         Log::channel('database')->info("Successfully logged out.", [
             "Auth", "Log", $userId, " ", " ", "Success"
         ]);
-        $authenticationServices->logout($request);
     }
 }
