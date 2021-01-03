@@ -11,6 +11,8 @@ use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Services\AuthenticationServices;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,11 +39,23 @@ class AuthenticationController extends Controller
     {
         $formCredentials = $request->only('email', 'password');
         $token = $authenticationServices->login($formCredentials);
+
+        $userId = $authenticationServices->getUserId($formCredentials['email']);
+
+        Log::channel('database')->info("Successfully logged in.", [
+            "Auth", "Log", $userId, " ", " ", "Success"
+        ]);
+
         return response()->json(['token' => $token]);
     }
 
     public function logout(Request $request, AuthenticationServices $authenticationServices): void
     {
+        $userId = Auth::user()->id;
+        Log::channel('database')->info("Successfully logged out.", [
+            "Auth", "Log", $userId, " ", " ", "Success"
+        ]);
+
         $authenticationServices->logout($request);
     }
 

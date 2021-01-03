@@ -83,4 +83,9 @@ class AuthenticationServices
     {
         return $user->createToken($user->email)->plainTextToken;
     }
+
+    public function getUserId(string $email): int
+    {
+        return User::query()->firstWhere('email', $email)->id;
+    }
 }

@@ -14,6 +14,7 @@ use App\Models\FermentableType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class FermentableController extends Controller
@@ -38,6 +39,11 @@ class FermentableController extends Controller
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $fermentable = new Fermentable($dataRequest);
         $fermentable->save();
+
+        Log::channel('database')->info("Successfully added new ingredient.", [
+            "Ingredient", "Added ingredient", "Fermentable", $dataRequest['name'], "Success"
+        ]);
+
         return response()->json(new FermentableResource($fermentable), Response::HTTP_CREATED);
     }
 
@@ -50,12 +56,22 @@ class FermentableController extends Controller
     {
         $dataRequest = $this->getDataRequest($request);
         $fermentable->update($dataRequest);
+
+        Log::channel('database')->info("Successfully updated new ingredient.", [
+            "Ingredient", "Updated ingredient", "Fermentable", $dataRequest['name'], "Success"
+        ]);
+
         return response()->json(new FermentableResource($fermentable), Response::HTTP_CREATED);
     }
 
     public function destroy(Fermentable $fermentable): JsonResponse
     {
         $fermentable->delete();
+
+        Log::channel('database')->info("Successfully deleted ingredient.", [
+            "Ingredient", "Deleted ingredient", "Fermentable", $fermentable['name'], "Success"
+        ]);
+
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 

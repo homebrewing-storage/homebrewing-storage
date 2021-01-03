@@ -14,6 +14,7 @@ use App\Models\YeastType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class YeastController extends Controller
@@ -38,6 +39,11 @@ class YeastController extends Controller
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $yeast = new Yeast($dataRequest);
         $yeast->save();
+
+        Log::channel('database')->info("Successfully added new ingredient.", [
+            "Ingredient", "Added ingredient", "Yeast", $dataRequest['name'], "Success"
+        ]);
+
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
     }
 
@@ -50,12 +56,22 @@ class YeastController extends Controller
     {
         $dataRequest = $this->getDataRequest($request);
         $yeast->update($dataRequest);
+
+        Log::channel('database')->info("Successfully updated new ingredient.", [
+            "Ingredient", "Updated ingredient", "Yeast", $dataRequest['name'], "Success"
+        ]);
+
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
     }
 
     public function destroy(Yeast $yeast): JsonResponse
     {
         $yeast->delete();
+
+        Log::channel('database')->info("Successfully deleted ingredient.", [
+            "Ingredient", "Deleted ingredient", "Yeast", $yeast['name'], "Success"
+        ]);
+
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
