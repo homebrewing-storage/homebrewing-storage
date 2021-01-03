@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Exceptions\Auth\UnauthorizedException;
+use App\Models\SocialAccount;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\Request;
+use Laravel\Socialite\Contracts\User as SocialiteUser;
 
 class AuthenticationServices
 {
@@ -39,6 +41,36 @@ class AuthenticationServices
         if (!$user || !$this->hash->check($formCredentials['password'], $user->password)) {
             throw new UnauthorizedException();
         }
+        return $this->createToken($user);
+    }
+
+    public function loginSocialMedia(SocialiteUser $socialiteUser, string $nameOfSocialAccount): string
+    {
+        $user = User::query()->firstWhere('email', $socialiteUser->getEmail());
+        if ($user === null) {
+            $username = $socialiteUser->getName();
+
+            if(!$username) $username = $socialiteUser->getNickname();
+
+            list($name, $surname) = explode(" ", "$username ");
+            $user = new User([
+                'name' => $name,
+                'surname' => $surname,
+                'email' => $socialiteUser->getEmail(),
+                'email_verified_at' => now(),
+            ]);
+            $user->save();
+        }
+
+        $socialAccount = SocialAccount::query()->firstWhere('provider_id', $socialiteUser->getId());
+        if ($socialAccount === null) {
+            $user->socialAccounts()->create([
+                'provider_id' => $socialiteUser->getId(),
+                'name' => $nameOfSocialAccount,
+            ]);
+            $user->save();
+        }
+
         return $this->createToken($user);
     }
 
