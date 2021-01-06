@@ -4,24 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Exceptions\Auth\UnauthorizedException;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserLogsService
 {
-    /**
-     * @throws UnauthorizedException
-     */
-    public function getUserLogs(): LengthAwarePaginator
+    public function getUserLogs(User $user): LengthAwarePaginator
     {
-        $user = Auth::user();
-
-        if(!$user)
-        {
-            throw new UnauthorizedException();
-        } else {
-            return $user->logs()->paginate(30);
-        }
+        return $user->logs()->paginate(30);
     }
 }
