@@ -13,18 +13,18 @@ class EmailVerificationController extends Controller
 {
     public function verify(): JsonResponse
     {
-        return response()->json(['message' => 'Check your mailbox']);
+        return response()->json(['message' => __('auth.email')]);
     }
 
     public function accept(EmailVerificationRequest $request): JsonResponse
     {
         $request->fulfill();
-        return response()->json(['message' => 'Verify successful']);
+        return response()->json(['message' => __('auth.accepted')]);
     }
 
     public function resend(Request $request): JsonResponse
     {
         $request->user()->sendEmailVerificationNotification();
-        return response()->json(['message' => 'Resending The Verification Email']);
+        return response()->json(['message' => __('auth.resend')]);
     }
 }

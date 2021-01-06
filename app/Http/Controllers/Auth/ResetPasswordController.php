@@ -12,10 +12,17 @@ use Illuminate\Http\JsonResponse;
 
 class ResetPasswordController extends Controller
 {
-    public function forgotPassword(EmailRequest $request, ResetPasswordServices $resetPasswordServices): JsonResponse
+    private ResetPasswordServices $service;
+
+    public function __construct(ResetPasswordServices $service)
     {
-        $email = $request->only('email');
-        $message = $resetPasswordServices->sendResetLink($email);
+        $this->service = $service;
+    }
+
+    public function forgotPassword(EmailRequest $request): JsonResponse
+    {
+        $email = $request->validated();
+        $message = $this->service->sendResetLink($email);
         return response()->json($message);
     }
 
@@ -24,10 +31,10 @@ class ResetPasswordController extends Controller
         return response()->json(['token' => $token]);
     }
 
-    public function resetPassword(ResetPasswordRequest $request, ResetPasswordServices $resetPasswordServices): JsonResponse
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
     {
-        $data = $request->only('email', 'password', 'password_confirmation', 'token');
-        $message = $resetPasswordServices->resetPassword($data, $request);
+        $data = $request->validated();
+        $message = $this->service->resetPassword($data, $request);
         return response()->json($message);
     }
 }
