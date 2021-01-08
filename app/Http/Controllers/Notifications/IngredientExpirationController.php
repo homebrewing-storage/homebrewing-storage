@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Notifications;
 
+use App\Http\Controllers\Controller;
 use App\Models\IngredientExpiration;
 use App\Services\IngredientExpirationService;
 use Symfony\Component\HttpFoundation\Response;

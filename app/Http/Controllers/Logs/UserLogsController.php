@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Logs;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\LogResource;
 use App\Services\UserLogsService;
 use Illuminate\Http\JsonResponse;

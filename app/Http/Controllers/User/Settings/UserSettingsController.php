@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User\Settings;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UserSettingsFormRequest;
 use App\Http\Resources\UserSettingsResource;
 use App\Services\UserSettingsService;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\ChangePasswordController;
-use App\Http\Controllers\IngredientExpirationController;
-use App\Http\Controllers\UserLogsController;
-use App\Http\Controllers\UserSettingsController;
+use App\Http\Controllers\User\Credentials\ChangePasswordController;
+use App\Http\Controllers\User\Settings\UserSettingsController;
+use App\Http\Controllers\Notifications\IngredientExpirationController;
+use App\Http\Controllers\Logs\UserLogsController;
 use App\Http\Controllers\Auth\{
     AuthenticationController,
     EmailVerificationController,
