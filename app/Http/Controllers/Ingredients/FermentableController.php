@@ -34,7 +34,7 @@ class FermentableController extends Controller
 
     public function store(FermentableFormRequest $request): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
+        $dataRequest = $request->validated();
         $userId = $request->user()->id;
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $fermentable = new Fermentable($dataRequest);
@@ -54,7 +54,7 @@ class FermentableController extends Controller
 
     public function update(FermentableFormRequest $request, Fermentable $fermentable): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
+        $dataRequest = $request->validated();
         $fermentable->update($dataRequest);
 
         Log::channel('database')->info("Successfully updated new ingredient.", [
@@ -78,10 +78,5 @@ class FermentableController extends Controller
     public function types(): JsonResponse
     {
         return response()->json(TypeResource::collection(FermentableType::all()));
-    }
-
-    private function getDataRequest(Request $request): array
-    {
-        return $request->only('name', 'type_id', 'yield', 'ebc', 'amount', 'expiration_date');
     }
 }

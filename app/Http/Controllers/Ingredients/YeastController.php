@@ -34,7 +34,7 @@ class YeastController extends Controller
 
     public function store(YeastFormRequest $request): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
+        $dataRequest = $request->validated();
         $userId = $request->user()->id;
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $yeast = new Yeast($dataRequest);
@@ -54,7 +54,7 @@ class YeastController extends Controller
 
     public function update(YeastFormRequest $request, Yeast $yeast): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
+        $dataRequest = $request->validated();
         $yeast->update($dataRequest);
 
         Log::channel('database')->info("Successfully updated new ingredient.", [
@@ -78,10 +78,5 @@ class YeastController extends Controller
     public function types(): JsonResponse
     {
         return response()->json(TypeResource::collection(YeastType::all()));
-    }
-
-    private function getDataRequest(Request $request): array
-    {
-        return $request->only('name', 'type_id', 'amount', 'expiration_date');
     }
 }

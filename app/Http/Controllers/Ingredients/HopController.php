@@ -32,7 +32,7 @@ class HopController extends Controller
 
     public function store(HopFormRequest $request): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
+        $dataRequest = $request->validated();
         $userId = $request->user()->id;
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $hop = new Hop($dataRequest);
@@ -52,7 +52,7 @@ class HopController extends Controller
 
     public function update(HopFormRequest $request, Hop $hop): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
+        $dataRequest = $request->validated();
         $hop->update($dataRequest);
 
         Log::channel('database')->info("Successfully updated new ingredient.", [
@@ -71,10 +71,5 @@ class HopController extends Controller
         ]);
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
-    }
-
-    private function getDataRequest(Request $request): array
-    {
-        return $request->only('name', 'amount', 'alpha_acid', 'expiration_date');
     }
 }

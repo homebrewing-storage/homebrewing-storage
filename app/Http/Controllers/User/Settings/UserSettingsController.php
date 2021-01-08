@@ -23,7 +23,7 @@ class UserSettingsController extends Controller
 
     public function update(UserSettingsFormRequest $request, UserSettingsService $settingsService)
     {
-        $dataRequest = $this->getDataRequest($request);
+        $dataRequest = $request->validated();
         $userSettings = $settingsService->update($dataRequest);
 
         Log::channel('database')->info("Successfully updated settings.", [
@@ -31,10 +31,5 @@ class UserSettingsController extends Controller
         ]);
 
         return response()->json(new UserSettingsResource($userSettings), Response::HTTP_CREATED);
-    }
-
-    private function getDataRequest(Request $request): array
-    {
-        return $request->only('reminder', 'email', 'hop', 'yeast', 'fermentable', 'extra');
     }
 }

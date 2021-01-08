@@ -34,7 +34,7 @@ class ExtraController extends Controller
 
     public function store(ExtraFormRequest $request): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
+        $dataRequest = $request->validated();
         $userId = $request->user()->id;
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $extra = new Extra($dataRequest);
@@ -55,7 +55,7 @@ class ExtraController extends Controller
 
     public function update(ExtraFormRequest $request, Extra $extra): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
+        $dataRequest = $request->validated();
         $extra->update($dataRequest);
 
         Log::channel('database')->info("Successfully updated new ingredient.", [
@@ -79,10 +79,5 @@ class ExtraController extends Controller
     public function types(): JsonResponse
     {
         return response()->json(TypeResource::collection(ExtraType::all()));
-    }
-
-    private function getDataRequest(Request $request): array
-    {
-        return $request->only('name', 'type_id', 'amount', 'expiration_date');
     }
 }
