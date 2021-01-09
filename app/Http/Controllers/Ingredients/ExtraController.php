@@ -9,12 +9,14 @@ use App\Http\Requests\Ingredients\ExtraFormRequest;
 use App\Http\Resources\Extra\ExtraCollectionResource;
 use App\Http\Resources\Extra\ExtraResource;
 use App\Http\Resources\TypeResource;
+use App\Events\Ingredient\UpdatedEvent;
+use App\Events\Ingredient\AddedEvent;
+use App\Events\Ingredient\DeletedEvent;
 use App\Models\Extra;
 use App\Models\ExtraType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExtraController extends Controller
@@ -38,11 +40,7 @@ class ExtraController extends Controller
         $userId = $request->user()->id;
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $extra = new Extra($dataRequest);
-
-        Log::channel('database')->info("Successfully added new ingredient.", [
-            "Ingredient", "Added ingredient", "Extra", $dataRequest['name'], "Success"
-        ]);
-
+        event(new AddedEvent($dataRequest['name'], "Extra"));
         $extra->save();
 
         return response()->json(new ExtraResource($extra), Response::HTTP_CREATED);
@@ -57,10 +55,7 @@ class ExtraController extends Controller
     {
         $dataRequest = $request->validated();
         $extra->update($dataRequest);
-
-        Log::channel('database')->info("Successfully updated new ingredient.", [
-            "Ingredient", "Updated ingredient", "Extra", $dataRequest['name'], "Success"
-        ]);
+        event(new UpdatedEvent($dataRequest['name'], "Extra"));
 
         return response()->json(new ExtraResource($extra), Response::HTTP_CREATED);
     }
@@ -68,10 +63,7 @@ class ExtraController extends Controller
     public function destroy(Extra $extra): JsonResponse
     {
         $extra->delete();
-
-        Log::channel('database')->info("Successfully deleted ingredient.", [
-            "Ingredient", "Deleted ingredient", "Extra", $extra['name'], "Success"
-        ]);
+        event(new DeletedEvent($extra['name'], "Extra"));
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }

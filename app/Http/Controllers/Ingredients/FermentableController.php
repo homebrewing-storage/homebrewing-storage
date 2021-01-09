@@ -9,12 +9,14 @@ use App\Http\Requests\Ingredients\FermentableFormRequest;
 use App\Http\Resources\Fermentable\FermentableCollectionResource;
 use App\Http\Resources\Fermentable\FermentableResource;
 use App\Http\Resources\TypeResource;
+use App\Events\Ingredient\AddedEvent;
+use App\Events\Ingredient\DeletedEvent;
+use App\Events\Ingredient\UpdatedEvent;
 use App\Models\Fermentable;
 use App\Models\FermentableType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class FermentableController extends Controller
@@ -39,10 +41,7 @@ class FermentableController extends Controller
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $fermentable = new Fermentable($dataRequest);
         $fermentable->save();
-
-        Log::channel('database')->info("Successfully added new ingredient.", [
-            "Ingredient", "Added ingredient", "Fermentable", $dataRequest['name'], "Success"
-        ]);
+        event(new AddedEvent($dataRequest['name'], "Fermentable"));
 
         return response()->json(new FermentableResource($fermentable), Response::HTTP_CREATED);
     }
@@ -56,10 +55,7 @@ class FermentableController extends Controller
     {
         $dataRequest = $request->validated();
         $fermentable->update($dataRequest);
-
-        Log::channel('database')->info("Successfully updated new ingredient.", [
-            "Ingredient", "Updated ingredient", "Fermentable", $dataRequest['name'], "Success"
-        ]);
+        event(new UpdatedEvent($dataRequest['name'], "Fermentable"));
 
         return response()->json(new FermentableResource($fermentable), Response::HTTP_CREATED);
     }
@@ -67,10 +63,7 @@ class FermentableController extends Controller
     public function destroy(Fermentable $fermentable): JsonResponse
     {
         $fermentable->delete();
-
-        Log::channel('database')->info("Successfully deleted ingredient.", [
-            "Ingredient", "Deleted ingredient", "Fermentable", $fermentable['name'], "Success"
-        ]);
+        event(new DeletedEvent($fermentable['name'], "Fermentable"));
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }

@@ -9,12 +9,14 @@ use App\Http\Requests\Ingredients\YeastFormRequest;
 use App\Http\Resources\TypeResource;
 use App\Http\Resources\Yeast\YeastCollectionResource;
 use App\Http\Resources\Yeast\YeastResource;
+use App\Events\Ingredient\AddedEvent;
+use App\Events\Ingredient\DeletedEvent;
+use App\Events\Ingredient\UpdatedEvent;
 use App\Models\Yeast;
 use App\Models\YeastType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class YeastController extends Controller
@@ -39,10 +41,7 @@ class YeastController extends Controller
         $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
         $yeast = new Yeast($dataRequest);
         $yeast->save();
-
-        Log::channel('database')->info("Successfully added new ingredient.", [
-            "Ingredient", "Added ingredient", "Yeast", $dataRequest['name'], "Success"
-        ]);
+        event(new AddedEvent($dataRequest['name'], "Yeast"));
 
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
     }
@@ -56,10 +55,7 @@ class YeastController extends Controller
     {
         $dataRequest = $request->validated();
         $yeast->update($dataRequest);
-
-        Log::channel('database')->info("Successfully updated new ingredient.", [
-            "Ingredient", "Updated ingredient", "Yeast", $dataRequest['name'], "Success"
-        ]);
+        event(new UpdatedEvent($dataRequest['name'], "Yeast"));
 
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
     }
@@ -67,10 +63,7 @@ class YeastController extends Controller
     public function destroy(Yeast $yeast): JsonResponse
     {
         $yeast->delete();
-
-        Log::channel('database')->info("Successfully deleted ingredient.", [
-            "Ingredient", "Deleted ingredient", "Yeast", $yeast['name'], "Success"
-        ]);
+        event(new DeletedEvent($yeast['name'], "Yeast"));
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
