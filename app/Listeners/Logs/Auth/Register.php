@@ -14,7 +14,6 @@ class Register extends BaseLog
     public function handle(Registered $event): void
     {
         $user = $event->user;
-        $user->userSettings()->create();
         $this->logger->channel('database')->info($this->message,
             [
                 "Auth",

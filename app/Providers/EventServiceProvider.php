@@ -19,6 +19,8 @@ use App\Listeners\Logs\Ingredient\Updated as UpdatedLog;
 use App\Listeners\Logs\Ingredient\Deleted as DeletedLog;
 use App\Listeners\Logs\User\Password as PasswordUpdated;
 use App\Listeners\Logs\User\Settings as SettingsUpdated;
+use App\Models\User;
+use App\Observers\RegisterObserver;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -56,4 +58,9 @@ class EventServiceProvider extends ServiceProvider
             //
         ]
     ];
+
+    public function boot()
+    {
+        User::observe(RegisterObserver::class);
+    }
 }
