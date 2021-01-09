@@ -46,7 +46,7 @@ class SocialiteAuthService extends BaseAuthService
         return $user;
     }
 
-    private function createProvider(User $user, $socialiteUser, string $nameOfSocialAccount): void
+    private function createProvider(User $user, SocialiteUser $socialiteUser, string $nameOfSocialAccount): void
     {
         $user->socialAccounts()->create([
             'provider_id' => $socialiteUser->getId(),

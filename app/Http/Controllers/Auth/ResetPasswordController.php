@@ -26,7 +26,7 @@ class ResetPasswordController extends Controller
         return response()->json($message);
     }
 
-    public function getToken($token): JsonResponse
+    public function getToken(string $token): JsonResponse
     {
         return response()->json(['token' => $token]);
     }

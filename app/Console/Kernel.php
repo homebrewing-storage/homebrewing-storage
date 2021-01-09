@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
+use App\Models\Ingredient;
 use App\Notifications\ExpiringIngredients;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
@@ -39,7 +40,7 @@ class Kernel extends ConsoleKernel
         require base_path('routes/console.php');
     }
 
-    private function checkUserIngredients($user): void
+    private function checkUserIngredients(User $user): void
     {
         if ($user->userSettings->hop) $this->checkIngredientType($user->hops);
         if ($user->userSettings->yeast) $this->checkIngredientType($user->yeasts);
@@ -61,7 +62,7 @@ class Kernel extends ConsoleKernel
         }
     }
 
-    private function checkIfInExpiringRange($ingredient, $userReminderRange): bool
+    private function checkIfInExpiringRange(Ingredient $ingredient, int $userReminderRange): bool
     {
         $expirationDate = $ingredient->expiration_date;
         $today = new Carbon();
@@ -72,7 +73,7 @@ class Kernel extends ConsoleKernel
         return false;
     }
 
-    private function notifyUser($user, $ingredient)
+    private function notifyUser(User $user, Ingredient $ingredient): void
     {
         $user->notify(
             new ExpiringIngredients($ingredient->name, $ingredient->expiration_date->format('Y-m-d'), $user->userSettings)

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
+use App\Models\UserSettings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -17,7 +18,7 @@ class ExpiringIngredients extends Notification
     protected $ingredientsDate;
     protected $userSettings;
 
-    public function __construct($ingredientsName, $ingredientsDate, $userSettings)
+    public function __construct(string $ingredientsName, string $ingredientsDate, UserSettings $userSettings)
     {
         $this->ingredientsName = $ingredientsName;
         $this->ingredientsDate = $ingredientsDate;

@@ -20,7 +20,7 @@ class UserSettingsController extends Controller
         return response()->json(new UserSettingsResource($userSettings));
     }
 
-    public function update(UserSettingsFormRequest $request, UserSettingsService $settingsService)
+    public function update(UserSettingsFormRequest $request, UserSettingsService $settingsService): JsonResponse
     {
         $dataRequest = $request->validated();
         $userSettings = $settingsService->update($dataRequest);
