@@ -14,7 +14,6 @@ class RegisterService extends BaseAuthService
         $data['password'] = $this->hash->make($data['password']);
         $user = new User($data);
         $user->save();
-        $user->userSettings()->create();
         event(new Registered($user));
         return $this->createToken($user);
     }
