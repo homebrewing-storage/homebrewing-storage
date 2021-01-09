@@ -16,7 +16,6 @@ use App\Models\Yeast;
 use App\Models\YeastType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
 
 class YeastController extends Controller
@@ -38,7 +37,7 @@ class YeastController extends Controller
     {
         $dataRequest = $request->validated();
         $userId = $request->user()->id;
-        $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
+        $dataRequest['user_id'] = $userId;
         $yeast = new Yeast($dataRequest);
         $yeast->save();
         event(new AddedEvent($dataRequest['name'], "Yeast"));

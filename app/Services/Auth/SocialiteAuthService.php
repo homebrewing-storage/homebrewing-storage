@@ -13,7 +13,8 @@ class SocialiteAuthService extends BaseAuthService
 {
     public function loginOrRegister(SocialiteUser $socialiteUser, string $nameOfSocialAccount): string
     {
-        $user = User::query()->firstWhere('email', $socialiteUser->getEmail());
+        $user = new User();
+        $user = $user->query()->firstWhere('email', $socialiteUser->getEmail());
         $socialAccount = SocialAccount::query()->firstWhere('provider_id', $socialiteUser->getId());
 
         if ($user === null) {

@@ -38,7 +38,7 @@ class FermentableController extends Controller
     {
         $dataRequest = $request->validated();
         $userId = $request->user()->id;
-        $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
+        $dataRequest['user_id'] = $userId;
         $fermentable = new Fermentable($dataRequest);
         $fermentable->save();
         event(new AddedEvent($dataRequest['name'], "Fermentable"));

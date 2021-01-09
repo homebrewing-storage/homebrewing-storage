@@ -14,7 +14,6 @@ use App\Events\Ingredient\UpdatedEvent;
 use App\Models\Hop;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
 
 class HopController extends Controller
@@ -36,7 +35,7 @@ class HopController extends Controller
     {
         $dataRequest = $request->validated();
         $userId = $request->user()->id;
-        $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
+        $dataRequest['user_id'] = $userId;
         $hop = new Hop($dataRequest);
         $hop->save();
         event(new AddedEvent($dataRequest['name'], "Hop"));

@@ -18,8 +18,10 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule): void
     {
+        $users = new User();
+        $users = $users->all();
         while (true) {
-            foreach (User::all() as $user) {
+            foreach ($users as $user) {
                 $this->checkUserIngredients($user);
             }
             echo "Done" . PHP_EOL;
@@ -62,7 +64,7 @@ class Kernel extends ConsoleKernel
     private function checkIfInExpiringRange($ingredient, $userReminderRange): bool
     {
         $expirationDate = $ingredient->expiration_date;
-        $today = Carbon::now();
+        $today = new Carbon();
 
         if (($today < $expirationDate) && ($today->addDays($userReminderRange) >= $expirationDate)) {
             return true;

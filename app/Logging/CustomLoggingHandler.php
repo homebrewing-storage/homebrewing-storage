@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Logging;
 
-
 use App\Exceptions\Auth\UnauthorizedException;
 use App\Models\UserLogs;
 use Illuminate\Support\Facades\Auth;
 use Monolog\Handler\AbstractProcessingHandler;
-use Illuminate\Support\Arr;
 
 class CustomLoggingHandler extends AbstractProcessingHandler
 {
@@ -32,7 +30,7 @@ class CustomLoggingHandler extends AbstractProcessingHandler
     protected function write(array $record): void
     {
         if ((in_array("Auth", $record['context'])) && (in_array("Log", $record['context']))) {
-            $record = Arr::add($record, 'user_id', $record['context'][2]);
+            $record['user_id'] = $record['context'][2];
             unset($record['context'][2]);
             $record['context'] = array_values($record['context']);
         } else {
@@ -40,7 +38,7 @@ class CustomLoggingHandler extends AbstractProcessingHandler
             if (!$user) {
                 throw new UnauthorizedException();
             }
-            $record = Arr::add($record, 'user_id', $user->id);
+            $record['user_id'] = $user->id;
         }
         $log = new UserLogs($record);
         $log->save();

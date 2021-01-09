@@ -38,7 +38,7 @@ class ExtraController extends Controller
     {
         $dataRequest = $request->validated();
         $userId = $request->user()->id;
-        $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
+        $dataRequest['user_id'] = $userId;
         $extra = new Extra($dataRequest);
         event(new AddedEvent($dataRequest['name'], "Extra"));
         $extra->save();

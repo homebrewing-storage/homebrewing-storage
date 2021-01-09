@@ -16,7 +16,7 @@ class UserSettingsService
 
     public function update($request): UserSettings
     {
-        $userSettings = Auth::user()->userSettings;
+        $userSettings = $request->user()->userSettings;
         $userSettings->update($request);
         return $userSettings;
     }
