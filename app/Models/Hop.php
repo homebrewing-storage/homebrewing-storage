@@ -10,6 +10,8 @@ class Hop extends Ingredient
 {
     use HasFactory;
 
+    protected string $type = "Hop";
+
     protected $fillable = [
         'user_id',
         'name',

@@ -6,5 +6,4 @@ namespace App\Events\Ingredient;
 
 class UpdatedEvent extends BaseIngredientEvent
 {
-
 }

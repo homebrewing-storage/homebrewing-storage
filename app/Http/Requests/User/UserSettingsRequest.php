@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
-class UserSettingsFormRequest extends BaseRequest
+use App\Http\Requests\BaseRequest;
+
+class UserSettingsRequest extends BaseRequest
 {
     public function rules(): array
     {

@@ -6,5 +6,5 @@ namespace App\Listeners\Logs\Ingredient;
 
 class Updated extends BaseIngredient
 {
-    protected string $message = "Successfully updated new ingredient.";
+    protected string $message = "Successfully updated ingredient.";
 }

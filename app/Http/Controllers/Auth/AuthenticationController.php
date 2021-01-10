@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
-use App\Events\Auth\LogoutEvent;
+use App\Events\Auth\LogoutAuthEvent;
 use App\Exceptions\Auth\UnauthorizedException;
 use App\Http\Requests\Auth\LoginUserRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
@@ -18,8 +18,7 @@ class AuthenticationController extends BaseAuthController
 {
     public function register(RegisterUserRequest $request, RegisterService $service): JsonResponse
     {
-        $data = $request->validated();
-        $token = $service->register($data);
+        $token = $service->register($request->validated());
         return $this->responseJson(__('auth.register'), $token, Response::HTTP_CREATED);
     }
 
@@ -28,15 +27,14 @@ class AuthenticationController extends BaseAuthController
      */
     public function login(LoginUserRequest $request, LoginService $service): JsonResponse
     {
-        $formCredentials = $request->validated();
-        $token = $service->login($formCredentials);
+        $token = $service->login($request->validated());
         return $this->responseJson(__('auth.success'), $token);
     }
 
     public function logout(Request $request): void
     {
         $user = $request->user();
-        event(new LogoutEvent($user));
+        event(new LogoutAuthEvent($user));
         $user->currentAccessToken()->delete();
     }
 }

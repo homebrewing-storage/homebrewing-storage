@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Auth;
 
-use App\Events\Auth\LoginEvent;
+use App\Events\Auth\LoginAuthEvent;
 use App\Models\SocialAccount;
 use App\Models\User;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
@@ -24,7 +24,7 @@ class SocialiteAuthService extends BaseAuthService
         if ($socialAccount === null) {
             $this->createProvider($user, $socialiteUser, $nameOfSocialAccount);
         }
-        event(new LoginEvent($user));
+        event(new LoginAuthEvent($user));
         return $this->createToken($user);
     }
 

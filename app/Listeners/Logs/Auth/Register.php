@@ -16,10 +16,9 @@ class Register extends BaseLog
         $user = $event->user;
         $this->logger->channel('database')->info($this->message,
             [
-                "Auth",
-                "Log",
-                $user->id,
-                "Success"
+                "Register",
+                $user->getAuthIdentifier(),
+                "Success",
             ]
         );
     }

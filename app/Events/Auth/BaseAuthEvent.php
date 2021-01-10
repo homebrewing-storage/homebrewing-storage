@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Events;
+namespace App\Events\Auth;
 
 use App\Models\User;
 
-abstract class BaseEvent
+abstract class BaseAuthEvent
 {
-    protected User $user;
+    private User $user;
 
     public function __construct(User $user)
     {

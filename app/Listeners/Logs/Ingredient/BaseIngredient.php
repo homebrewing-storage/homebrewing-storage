@@ -11,8 +11,8 @@ abstract class BaseIngredient extends BaseLog
 {
     public function handle(BaseIngredientEvent $event): void
     {
-        $name = $event->ingredient;
-        $type = $event->type;
+        $name = $event->getIngredientName();
+        $type = $event->getIngredientType();
         $this->logger->channel('database')->info($this->message,
             [
                 "Ingredient",

@@ -6,5 +6,4 @@ namespace App\Events\UserSettings;
 
 class SettingsChangeEvent extends BaseUserEvent
 {
-
 }

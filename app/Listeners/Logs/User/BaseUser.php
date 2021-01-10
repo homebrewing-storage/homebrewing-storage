@@ -11,7 +11,7 @@ abstract class BaseUser extends BaseLog
 {
     public function handle(BaseUserEvent $event): void
     {
-        $type = $event->type;
+        $type = $event->getType();
         $this->logger->channel('database')->info($this->message,
             [
                 "Auth",

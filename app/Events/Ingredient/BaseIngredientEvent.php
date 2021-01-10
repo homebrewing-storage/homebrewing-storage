@@ -4,14 +4,24 @@ declare(strict_types=1);
 
 namespace App\Events\Ingredient;
 
+use App\Models\Ingredient;
+
 abstract class BaseIngredientEvent
 {
-    public string $ingredient;
-    public string $type;
+    private Ingredient $ingredient;
 
-    public function __construct(string $ingredient, string $type)
+    public function __construct(Ingredient $ingredient)
     {
         $this->ingredient = $ingredient;
-        $this->type = $type;
+    }
+
+    public function getIngredientName(): string
+    {
+        return $this->ingredient->name;
+    }
+
+    public function getIngredientType(): string
+    {
+        return $this->ingredient->getIngredientType();
     }
 }

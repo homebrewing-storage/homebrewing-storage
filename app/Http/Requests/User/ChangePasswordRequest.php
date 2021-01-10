@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
+
+use App\Http\Requests\BaseRequest;
 
 class ChangePasswordRequest extends BaseRequest
 {

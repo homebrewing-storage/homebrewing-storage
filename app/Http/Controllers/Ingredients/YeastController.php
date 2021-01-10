@@ -4,44 +4,30 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Ingredients;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Ingredients\YeastFormRequest;
-use App\Http\Resources\TypeResource;
+use App\Http\Requests\Ingredients\YeastRequest;
+use App\Http\Resources\IngredientType\TypeResource;
 use App\Http\Resources\Yeast\YeastCollectionResource;
 use App\Http\Resources\Yeast\YeastResource;
-use App\Events\Ingredient\AddedEvent;
-use App\Events\Ingredient\DeletedEvent;
-use App\Events\Ingredient\UpdatedEvent;
 use App\Models\Yeast;
 use App\Models\YeastType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class YeastController extends Controller
+class YeastController extends BaseIngredientController
 {
-    public function __construct()
-    {
-        $this->middleware('can:check,yeast')->only(['show', 'update', 'destroy']);
-    }
-
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $yeastsPaginate = $request->user()->yeasts()->paginate($perPage, ['*'], 'page', $page);
+        $relation = $request->user()->yeasts();
+        $yeastsPaginate = $this->service->paginate($relation, (int)$perPage, (int)$page);
         return response()->json(new YeastCollectionResource($yeastsPaginate));
     }
 
-    public function store(YeastFormRequest $request): JsonResponse
+    public function store(YeastRequest $request): JsonResponse
     {
-        $dataRequest = $request->validated();
-        $userId = $request->user()->id;
-        $dataRequest['user_id'] = $userId;
-        $yeast = new Yeast($dataRequest);
-        $yeast->save();
-        event(new AddedEvent($dataRequest['name'], "Yeast"));
-
+        $yeast = $this->service->create($request->user()->yeasts(), $request->validated());
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
     }
 
@@ -50,20 +36,15 @@ class YeastController extends Controller
         return response()->json(new YeastResource($yeast));
     }
 
-    public function update(YeastFormRequest $request, Yeast $yeast): JsonResponse
+    public function update(YeastRequest $request, Yeast $yeast): JsonResponse
     {
-        $dataRequest = $request->validated();
-        $yeast->update($dataRequest);
-        event(new UpdatedEvent($dataRequest['name'], "Yeast"));
-
+        $yeast->update($request->validated());
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
     }
 
     public function destroy(Yeast $yeast): JsonResponse
     {
         $yeast->delete();
-        event(new DeletedEvent($yeast['name'], "Yeast"));
-
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 

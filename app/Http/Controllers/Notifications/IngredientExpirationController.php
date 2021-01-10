@@ -6,34 +6,41 @@ namespace App\Http\Controllers\Notifications;
 
 use App\Http\Controllers\Controller;
 use App\Models\IngredientExpiration;
-use App\Services\IngredientExpirationService;
+use App\Services\Notifications\IngredientExpirationService;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\JsonResponse;
 
 class IngredientExpirationController extends Controller
 {
-    public function index(IngredientExpirationService $expirationService): JsonResponse
+    private IngredientExpirationService $service;
+
+    public function __construct(IngredientExpirationService $service)
     {
-        $notifications = $expirationService->getNotifications();
+        $this->service = $service;
+    }
+
+    public function index(Request $request): JsonResponse
+    {
+        $notifications = $this->service->getNotifications($request->user());
         return response()->json($notifications);
     }
 
-    public function show(IngredientExpirationService $expirationService): JsonResponse
+    public function show(Request $request): JsonResponse
     {
-        $unreadCount = $expirationService->getUnread();
+        $unreadCount = $this->service->getUnread($request->user());
         return response()->json($unreadCount);
     }
 
-    public function destroy(IngredientExpiration $notification, IngredientExpirationService $expirationService): JsonResponse
+    public function destroy(IngredientExpiration $notification): JsonResponse
     {
-        $expirationService->deleteNotification($notification);
+        $this->service->deleteNotification($notification);
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function update(IngredientExpiration $notification, IngredientExpirationService $expirationService): JsonResponse
+    public function update(IngredientExpiration $notification): JsonResponse
     {
-        $read = $expirationService->readNotifications($notification);
-
-        return response()->json($read, Response::HTTP_CREATED);
+        $this->service->readNotifications($notification);
+        return response()->json(null, Response::HTTP_CREATED);
     }
 }

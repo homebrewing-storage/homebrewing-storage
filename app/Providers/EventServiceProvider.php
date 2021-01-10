@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Events\Auth\LoginEvent;
-use App\Events\Auth\LogoutEvent;
-use App\Events\Ingredient\AddedEvent;
-use App\Events\Ingredient\DeletedEvent;
-use App\Events\Ingredient\UpdatedEvent;
+use App\Events\Auth\LoginAuthEvent;
+use App\Events\Auth\LogoutAuthEvent;
+use App\Events\Ingredient\AddedEvent as AddedIngredientEvent;
+use App\Events\Ingredient\DeletedEvent as DeletedIngredientEvent;
+use App\Events\Ingredient\UpdatedEvent as UpdatedIngredientEvent;
 use App\Events\UserSettings\PasswordChangeEvent;
 use App\Events\UserSettings\SettingsChangeEvent;
 use App\Listeners\Logs\Auth\Login as LoginLog;
@@ -33,19 +33,19 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
             RegisterLog::class,
         ],
-        LoginEvent::class => [
+        LoginAuthEvent::class => [
             LoginLog::class,
         ],
-        LogoutEvent::class => [
+        LogoutAuthEvent::class => [
             LogoutLog::class,
         ],
-        AddedEvent::class => [
-          AddedLog::class
+        AddedIngredientEvent::class => [
+            AddedLog::class
         ],
-        UpdatedEvent::class => [
+        UpdatedIngredientEvent::class => [
             UpdatedLog::class
         ],
-        DeletedEvent::class => [
+        DeletedIngredientEvent::class => [
             DeletedLog::class
         ],
         PasswordChangeEvent::class => [

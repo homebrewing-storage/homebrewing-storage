@@ -2,24 +2,22 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Services\Notifications;
 
-use App\Http\Resources\NotificationResource;
+use App\Http\Resources\Notification\NotificationResource;
 use App\Models\IngredientExpiration;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class IngredientExpirationService
 {
-    public function getNotifications(): JsonResource
+    public function getNotifications(User $user): JsonResource
     {
-        $user = Auth::user();
         return NotificationResource::collection($user->notifications);
     }
 
-    public function getUnread(): int
+    public function getUnread(User $user): int
     {
-        $user = Auth::user();
         return count(NotificationResource::collection($user->unreadNotifications));
     }
 
@@ -28,8 +26,8 @@ class IngredientExpirationService
         $notification->delete();
     }
 
-    public function readNotifications(IngredientExpiration $notification): bool
+    public function readNotifications(IngredientExpiration $notification): void
     {
-        return $notification->update(['read_at' => now()]);
+        $notification->update(['read_at' => now()]);
     }
 }

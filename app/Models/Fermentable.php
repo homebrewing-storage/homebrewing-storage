@@ -11,6 +11,8 @@ class Fermentable extends Ingredient
 {
     use HasFactory;
 
+    protected string $type = "Fermentable";
+
     protected $fillable = [
         'user_id',
         'type_id',
@@ -23,6 +25,6 @@ class Fermentable extends Ingredient
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(FermentableType::class,'type_id');
+        return $this->belongsTo(FermentableType::class, 'type_id');
     }
 }

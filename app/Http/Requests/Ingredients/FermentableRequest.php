@@ -6,13 +6,15 @@ namespace App\Http\Requests\Ingredients;
 
 use App\Http\Requests\BaseRequest;
 
-class HopFormRequest extends BaseRequest
+class FermentableRequest extends BaseRequest
 {
     public function rules(): array
     {
         return [
             'name' => 'required|string|min:3|max:255',
-            'alpha_acid' => 'required|numeric|min:1|max:3',
+            'type_id' => 'required|numeric|exists:fermentable_types,id',
+            'yield' => 'required|numeric|min:1|max:255',
+            'ebc' => 'required|numeric|min:1|max:255',
             'amount' => 'required|numeric|min:1',
             'expiration_date' => 'required|date'
         ];

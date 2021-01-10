@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\User\Credentials;
 
-use App\Events\UserSettings\PasswordChangeEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ChangePasswordRequest;
-use App\Services\ChangePasswordService;
+use App\Http\Requests\User\ChangePasswordRequest;
+use App\Services\User\ChangePasswordService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ChangePasswordController extends Controller
 {
-    public function update(ChangePasswordRequest $request, ChangePasswordService $changePasswordService): JsonResponse
+    public function update(ChangePasswordRequest $request, ChangePasswordService $service): JsonResponse
     {
-        $changePasswordService->update($request);
-        event(new PasswordChangeEvent("Password change"));
-
+        $user = $request->user();
+        $password = $request->input('password_new');
+        $service->update($user, $password);
         return response()->json(Response::HTTP_CREATED);
     }
 }
