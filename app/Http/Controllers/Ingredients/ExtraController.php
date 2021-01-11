@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Ingredients;
 
+use App\Http\Controllers\Contracts\ExtraInterface;
 use App\Http\Requests\Ingredients\ExtraRequest;
 use App\Http\Resources\Extra\ExtraCollectionResource;
 use App\Http\Resources\Extra\ExtraResource;
@@ -14,7 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ExtraController extends BaseIngredientController
+class ExtraController extends BaseIngredientController implements ExtraInterface
 {
     public function index(Request $request): JsonResponse
     {

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Contracts\SocialiteAuthInterface;
 use App\Services\Auth\SocialiteAuthService;
 use Illuminate\Http\JsonResponse;
 use Laravel\Socialite\SocialiteManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class SocialiteAuthController extends BaseAuthController
+class SocialiteAuthController extends BaseAuthController implements SocialiteAuthInterface
 {
     private SocialiteManager $manager;
     private SocialiteAuthService $service;

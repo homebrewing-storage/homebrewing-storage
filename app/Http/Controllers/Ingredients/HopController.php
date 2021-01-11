@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Ingredients;
 
+use App\Http\Controllers\Contracts\HopInterface;
 use App\Http\Requests\Ingredients\HopRequest;
 use App\Http\Resources\Hop\HopCollectionResource;
 use App\Http\Resources\Hop\HopResource;
@@ -12,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class HopController extends BaseIngredientController
+class HopController extends BaseIngredientController implements HopInterface
 {
     public function index(Request $request): JsonResponse
     {

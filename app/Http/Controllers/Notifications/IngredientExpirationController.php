@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Notifications;
 
+use App\Http\Controllers\Contracts\IngredientExpirationInterface;
 use App\Http\Controllers\Controller;
 use App\Models\IngredientExpiration;
 use App\Services\Notifications\IngredientExpirationService;
@@ -11,7 +12,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\JsonResponse;
 
-class IngredientExpirationController extends Controller
+class IngredientExpirationController extends Controller implements IngredientExpirationInterface
 {
     private IngredientExpirationService $service;
 

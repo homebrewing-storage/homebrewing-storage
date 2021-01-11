@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Ingredients;
 
+use App\Http\Controllers\Contracts\FermentableInterface;
 use App\Http\Requests\Ingredients\FermentableRequest;
 use App\Http\Resources\Fermentable\FermentableCollectionResource;
 use App\Http\Resources\Fermentable\FermentableResource;
@@ -14,7 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class FermentableController extends BaseIngredientController
+class FermentableController extends BaseIngredientController implements FermentableInterface
 {
     public function index(Request $request): JsonResponse
     {

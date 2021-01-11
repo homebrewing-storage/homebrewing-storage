@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Events\Auth\LogoutAuthEvent;
 use App\Exceptions\Auth\UnauthorizedException;
+use App\Http\Controllers\Contracts\AuthenticationInterface;
 use App\Http\Requests\Auth\LoginUserRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Services\Auth\LoginService;
@@ -14,7 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthenticationController extends BaseAuthController
+class AuthenticationController extends BaseAuthController implements AuthenticationInterface
 {
     public function register(RegisterUserRequest $request, RegisterService $service): JsonResponse
     {

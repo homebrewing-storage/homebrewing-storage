@@ -1,0 +1,1351 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Homebrewing storage",
+        "description": "Online storage of brewing ingredients",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost",
+            "description": "Demo API Server"
+        }
+    ],
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register an user with provided data",
+                "description": "Registers a user",
+                "operationId": "register",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Allows user to log in",
+                "description": "Logs in a user",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Allows user to log out",
+                "description": "Logs out a user",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/email/verify": {
+            "get": {
+                "tags": [
+                    "Email verification"
+                ],
+                "summary": "After registering user must activate the account via provided email",
+                "operationId": "verify",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/email/verify/{id}/{hash}": {
+            "get": {
+                "tags": [
+                    "Email verification"
+                ],
+                "summary": "User must activate the account via provided link sent to the email",
+                "operationId": "accept",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "user's id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "hash",
+                        "in": "path",
+                        "description": "hashed, unique id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/email/verification-notification": {
+            "post": {
+                "tags": [
+                    "Resend email verification"
+                ],
+                "summary": "Resend activation link",
+                "operationId": "resend",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/forgot-password": {
+            "post": {
+                "tags": [
+                    "Password Reset"
+                ],
+                "summary": "Send an email containing reset password link",
+                "operationId": "forgotPassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmailRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/api/reset-password/{token}": {
+            "get": {
+                "tags": [
+                    "Password Reset"
+                ],
+                "summary": "Get token sent to the email",
+                "operationId": "getToken",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "description": "hashed token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/reset-password": {
+            "post": {
+                "tags": [
+                    "Password Reset"
+                ],
+                "summary": "Reset user's password after receiving an appriopriate token",
+                "operationId": "resetPassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ResetPasswordRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/login/github": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Allows user to log in",
+                "description": "Logs in a user via an existing Github account",
+                "operationId": "redirectToGithub",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/login/facebook": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Allows user to log in",
+                "description": "Logs in a user via an existing Facebook account",
+                "operationId": "redirectToFacebook",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/api/extras": {
+            "get": {
+                "tags": [
+                    "Extras"
+                ],
+                "summary": "Get all paginated extras of a user",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Extras"
+                ],
+                "summary": "Add new extra",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExtraRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/extras/{extras}": {
+            "get": {
+                "tags": [
+                    "Extras"
+                ],
+                "summary": "Show particular extra",
+                "operationId": "show",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/extras/{extra}": {
+            "put": {
+                "tags": [
+                    "Extras"
+                ],
+                "summary": "Update extra",
+                "operationId": "update",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExtraRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Extras"
+                ],
+                "summary": "Delete extra",
+                "operationId": "destroy",
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/fermentables": {
+            "get": {
+                "tags": [
+                    "Fermentables"
+                ],
+                "summary": "Get all paginated fermentables of a user",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Fermentables"
+                ],
+                "summary": "Add new fermentable",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FermentableRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/fermentables/{fermentable}": {
+            "get": {
+                "tags": [
+                    "Fermentables"
+                ],
+                "summary": "Get particular fermentable",
+                "operationId": "show",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Fermentables"
+                ],
+                "summary": " Update fermentable",
+                "operationId": "update",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FermentableRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Fermentables"
+                ],
+                "summary": "Delete fermentable",
+                "operationId": "destroy",
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/hops": {
+            "get": {
+                "tags": [
+                    "Hops"
+                ],
+                "summary": "Get all paginated hops of a user",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Hops"
+                ],
+                "summary": "Add new hop",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HopRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/hops/{hop}": {
+            "get": {
+                "tags": [
+                    "Hops"
+                ],
+                "summary": "Show particular hop",
+                "operationId": "show",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Hops"
+                ],
+                "summary": "Update hop",
+                "operationId": "update",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HopRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Hops"
+                ],
+                "summary": "Delete hop",
+                "operationId": "destroy",
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/yeasts": {
+            "get": {
+                "tags": [
+                    "Yeasts"
+                ],
+                "summary": "Get all paginated yeasts of a user",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Yeasts"
+                ],
+                "summary": "Add new yeast",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/YeastRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/yeasts/{yeast}": {
+            "get": {
+                "tags": [
+                    "Yeasts"
+                ],
+                "summary": "Show particular yeast",
+                "operationId": "show",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Yeasts"
+                ],
+                "summary": "Update yeast",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/YeastRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Yeasts"
+                ],
+                "summary": "Delete yeast",
+                "operationId": "destroy",
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/logs": {
+            "get": {
+                "tags": [
+                    "Logs"
+                ],
+                "summary": "Get all logs of a user",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/notifications": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Get all notifications of a user",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/unreadNotifications": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Get all unread notifications of a user",
+                "operationId": "show",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/notifications/{notification}": {
+            "put": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Mark as read notification of a user",
+                "operationId": "update",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Delete read notification of a user",
+                "operationId": "destroy",
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/change-password": {
+            "post": {
+                "tags": [
+                    "User Settings"
+                ],
+                "summary": "Change user's password",
+                "operationId": "updatePassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChangePasswordRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/settings": {
+            "get": {
+                "tags": [
+                    "User Settings"
+                ],
+                "summary": "Get user's settings",
+                "operationId": "showSettings",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "User Settings"
+                ],
+                "summary": "Update user's settings",
+                "operationId": "updateSettings",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserSettingsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "EmailRequest": {
+                "title": "Send password reset email",
+                "description": "Send an email containing password reset link",
+                "required": [
+                    "email"
+                ],
+                "properties": {
+                    "email": {
+                        "title": "User's email",
+                        "description": "Email address of the user",
+                        "type": "string",
+                        "example": "bob.ross@example.com"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginUserRequest": {
+                "title": "Login user request",
+                "description": "Logs in a user request body data",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "title": "User's email",
+                        "description": "Email of the existing user",
+                        "type": "string",
+                        "example": "bob.ross@example.com"
+                    },
+                    "password": {
+                        "title": "User's password",
+                        "description": "Password of the existing user",
+                        "type": "string",
+                        "example": "Bobross123"
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterUserRequest": {
+                "title": "Register user request",
+                "description": "Register a user using request body data",
+                "required": [
+                    "name",
+                    "surname",
+                    "email",
+                    "password",
+                    "password_confirmation"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "User's name",
+                        "description": "Name of the new user",
+                        "type": "string",
+                        "example": "Bob"
+                    },
+                    "surname": {
+                        "title": "User's surname",
+                        "description": "Surname of the new user",
+                        "type": "string",
+                        "example": "Ross"
+                    },
+                    "email": {
+                        "title": "User's email",
+                        "description": "Email address of the new user",
+                        "type": "string",
+                        "example": "bob.ross@example.com"
+                    },
+                    "password": {
+                        "title": "User's password",
+                        "description": "Password of the new user",
+                        "type": "string",
+                        "example": "Bobross123"
+                    },
+                    "password_confirmation": {
+                        "title": "User's password confirmation",
+                        "description": "Password confirmation of the new user",
+                        "type": "string",
+                        "example": "Bobross123"
+                    }
+                },
+                "type": "object"
+            },
+            "ResetPasswordRequest": {
+                "title": "Password reset request",
+                "description": "Reset user's password using request body data",
+                "required": [
+                    "token",
+                    "email",
+                    "password",
+                    "password_confirmation"
+                ],
+                "properties": {
+                    "token": {
+                        "title": "User's token",
+                        "description": "Token given in email",
+                        "type": "string",
+                        "example": "9862e31df4072df8c4cf0ff8608fea8738ba7a0a6adee98902c957f40ae04342"
+                    },
+                    "email": {
+                        "title": "User's email",
+                        "description": "User's email",
+                        "type": "string",
+                        "example": "bob.ross@example.com"
+                    },
+                    "password": {
+                        "title": "User's password",
+                        "description": "new password of the user",
+                        "type": "string",
+                        "example": "Bobross123"
+                    },
+                    "password_confirmation": {
+                        "title": "User's password confirmation",
+                        "description": "Password confirmation of the user",
+                        "type": "string",
+                        "example": "Bobross123"
+                    }
+                },
+                "type": "object"
+            },
+            "ExtraRequest": {
+                "title": "Extra form request",
+                "description": "Extra form",
+                "required": [
+                    "name",
+                    "type_id",
+                    "amount",
+                    "expiration_date"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "User's extra name",
+                        "type": "string",
+                        "example": "Illa"
+                    },
+                    "type_id": {
+                        "title": "User's extra type_id",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "amount": {
+                        "title": "User's extra expiration date",
+                        "type": "datetime",
+                        "example": "2020-01-04"
+                    },
+                    "expiration_date": {
+                        "title": "User's extra expiration date",
+                        "type": "datetime",
+                        "example": "2020-01-04"
+                    }
+                },
+                "type": "object"
+            },
+            "FermentableRequest": {
+                "title": "Fermentable form request",
+                "description": "Fermentable form",
+                "required": [
+                    "name",
+                    "type_id",
+                    "yield",
+                    "ebc",
+                    "amount",
+                    "expiration_date"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "User's fermentable name",
+                        "type": "string",
+                        "example": "Illa"
+                    },
+                    "type_id": {
+                        "title": "User's fermentable type_id",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "yield": {
+                        "title": "User's fermentable type_id",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "ebc": {
+                        "title": "User's fermentable ebc value",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "amount": {
+                        "title": "User's fermentable amount",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "expiration_date": {
+                        "title": "User's hop expiration date",
+                        "type": "datetime",
+                        "example": "2020-01-04"
+                    }
+                },
+                "type": "object"
+            },
+            "HopRequest": {
+                "title": "Hop form request",
+                "description": "Hop form",
+                "required": [
+                    "name",
+                    "alpha_acid",
+                    "amount",
+                    "expiration_date"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "User's hop name",
+                        "type": "string",
+                        "example": "Illa"
+                    },
+                    "alpha_acid": {
+                        "title": "User's hop alpha acid",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "amount": {
+                        "title": "User's hop amount",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "expiration_date": {
+                        "title": "User's hop expiration date",
+                        "type": "datetime",
+                        "example": "2020-01-04"
+                    }
+                },
+                "type": "object"
+            },
+            "YeastRequest": {
+                "title": "Yeast form request",
+                "description": "Yeast form",
+                "required": [
+                    "name",
+                    "type_id",
+                    "amount",
+                    "expiration_date"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "User's yeast name",
+                        "type": "string",
+                        "example": "Illa"
+                    },
+                    "type_id": {
+                        "title": "User's yeast type_id",
+                        "type": "string",
+                        "example": "2"
+                    },
+                    "amount": {
+                        "title": "User's yeast amount",
+                        "type": "string",
+                        "example": "20"
+                    },
+                    "expiration_date": {
+                        "title": "User's yeast expiration date",
+                        "type": "datetime",
+                        "example": "2020-01-04"
+                    }
+                },
+                "type": "object"
+            },
+            "ChangePasswordRequest": {
+                "title": "Password change user request",
+                "description": "Change user's password using request body data",
+                "required": [
+                    "password",
+                    "password_new",
+                    "password_confirmation"
+                ],
+                "properties": {
+                    "password": {
+                        "title": "User's password",
+                        "description": "Current password of the user",
+                        "type": "string",
+                        "example": "Bobross123"
+                    },
+                    "password_new": {
+                        "title": "New password",
+                        "description": "New password of the user",
+                        "type": "string",
+                        "example": "Bobross1234"
+                    },
+                    "password_confirmation": {
+                        "title": "New password confirmation",
+                        "description": "New password confirmation of the user",
+                        "type": "string",
+                        "example": "Bobross1234"
+                    }
+                },
+                "type": "object"
+            },
+            "UserSettingsRequest": {
+                "title": "Change user's settings",
+                "description": "Change user's settings",
+                "required": [
+                    "reminder",
+                    "email",
+                    "hop",
+                    "yeast",
+                    "fermentable",
+                    "extra"
+                ],
+                "properties": {
+                    "reminder": {
+                        "title": "Reminder in days",
+                        "description": "Specifies when to notify user",
+                        "type": "string",
+                        "example": "7"
+                    },
+                    "email": {
+                        "title": "Email notification",
+                        "description": "Decides if user wants to receive an email notification",
+                        "type": "string",
+                        "example": "1"
+                    },
+                    "hop": {
+                        "title": "Hop notification",
+                        "description": "Decides if user wants to receive a notification about expiring hops",
+                        "type": "string",
+                        "example": "1"
+                    },
+                    "yeast": {
+                        "title": "Yeast notification",
+                        "description": "Decides if user wants to receive a notification about expiring yeasts",
+                        "type": "string",
+                        "example": "1"
+                    },
+                    "fermentable": {
+                        "title": "Fermentable notification",
+                        "description": "Decides if user wants to receive a notification about expiring fermentables",
+                        "type": "string",
+                        "example": "0"
+                    },
+                    "extra": {
+                        "title": "Extra notification",
+                        "description": "Decides if user wants to receive a notification about expiring extras",
+                        "type": "string",
+                        "example": "0"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "apiAuth": {
+                "type": "http",
+                "description": "Login with email and password to get the authentication token",
+                "name": "Token based Based",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Homebrewing API",
+            "description": "API Endpoints of Controllers"
+        }
+    ],
+    "security": [
+        []
+    ]
+}

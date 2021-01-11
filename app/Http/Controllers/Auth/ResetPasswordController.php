@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Contracts\ResetPasswordInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\EmailRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Services\Auth\ResetPasswordServices;
 use Illuminate\Http\JsonResponse;
 
-class ResetPasswordController extends Controller
+class ResetPasswordController extends Controller implements ResetPasswordInterface
 {
     private ResetPasswordServices $service;
 

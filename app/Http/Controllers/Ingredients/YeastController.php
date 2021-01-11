@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Ingredients;
 
+use App\Http\Controllers\Contracts\YeastInterface;
 use App\Http\Requests\Ingredients\YeastRequest;
 use App\Http\Resources\IngredientType\TypeResource;
 use App\Http\Resources\Yeast\YeastCollectionResource;
@@ -14,7 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class YeastController extends BaseIngredientController
+class YeastController extends BaseIngredientController implements YeastInterface
 {
     public function index(Request $request): JsonResponse
     {

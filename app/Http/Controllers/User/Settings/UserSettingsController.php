@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\User\Settings;
 
+use App\Http\Controllers\Contracts\UserSettingsInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserSettingsRequest;
 use App\Http\Resources\User\UserSettingsResource;
@@ -12,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class UserSettingsController extends Controller
+class UserSettingsController extends Controller implements UserSettingsInterface
 {
     private UserSettingsService $service;
 
