@@ -11,12 +11,19 @@ use App\Http\Resources\Fermentable\FermentableResource;
 use App\Http\Resources\IngredientType\TypeResource;
 use App\Models\Fermentable;
 use App\Models\FermentableType;
+use App\Services\Ingredient\IngredientService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class FermentableController extends BaseIngredientController implements FermentableInterface
 {
+    public function __construct(IngredientService $service)
+    {
+        parent::__construct($service);
+        $this->middleware('can:check,fermentable')->only(['show', 'update', 'destroy']);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('perPage', 30);

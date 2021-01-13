@@ -11,12 +11,19 @@ use App\Http\Resources\Extra\ExtraResource;
 use App\Http\Resources\IngredientType\TypeResource;
 use App\Models\Extra;
 use App\Models\ExtraType;
+use App\Services\Ingredient\IngredientService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExtraController extends BaseIngredientController implements ExtraInterface
 {
+    public function __construct(IngredientService $service)
+    {
+        parent::__construct($service);
+        $this->middleware('can:check,extra')->only(['show', 'update', 'destroy']);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('perPage', 30);

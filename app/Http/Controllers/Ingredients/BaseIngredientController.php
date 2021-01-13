@@ -14,6 +14,5 @@ abstract class BaseIngredientController extends Controller
     public function __construct(IngredientService $service)
     {
         $this->service = $service;
-        $this->middleware('can:check,extra')->only(['show', 'update', 'destroy']);
     }
 }

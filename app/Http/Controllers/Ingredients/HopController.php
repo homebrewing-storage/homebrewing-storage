@@ -9,12 +9,19 @@ use App\Http\Requests\Ingredients\HopRequest;
 use App\Http\Resources\Hop\HopCollectionResource;
 use App\Http\Resources\Hop\HopResource;
 use App\Models\Hop;
+use App\Services\Ingredient\IngredientService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class HopController extends BaseIngredientController implements HopInterface
 {
+    public function __construct(IngredientService $service)
+    {
+        parent::__construct($service);
+        $this->middleware('can:check,hop')->only(['show', 'update', 'destroy']);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('perPage', 30);

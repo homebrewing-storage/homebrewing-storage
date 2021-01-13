@@ -11,12 +11,19 @@ use App\Http\Resources\Yeast\YeastCollectionResource;
 use App\Http\Resources\Yeast\YeastResource;
 use App\Models\Yeast;
 use App\Models\YeastType;
+use App\Services\Ingredient\IngredientService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class YeastController extends BaseIngredientController implements YeastInterface
 {
+    public function __construct(IngredientService $service)
+    {
+        parent::__construct($service);
+        $this->middleware('can:check,yeast')->only(['show', 'update', 'destroy']);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->query('perPage', 30);
