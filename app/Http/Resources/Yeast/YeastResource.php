@@ -15,7 +15,7 @@ class YeastResource extends JsonResource
             'name' => $this->name,
             'type' => $this->type->name,
             'amount' => $this->amount,
-            'expiration_date' => $this->expiration_date,
+            'expiration_date' => $this->expiration_date->format('Y-m-d'),
         ];
     }
 }

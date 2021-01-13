@@ -15,7 +15,7 @@ class HopResource extends JsonResource
             'name' => $this->name,
             'amount' => $this->amount,
             'alpha_acid' => $this->alpha_acid,
-            'expiration_date' => $this->expiration_date,
+            'expiration_date' => $this->expiration_date->format('Y-m-d'),
         ];
     }
 }

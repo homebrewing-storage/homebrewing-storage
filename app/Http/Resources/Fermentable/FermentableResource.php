@@ -17,7 +17,7 @@ class FermentableResource extends JsonResource
             'yield' => $this->yield,
             'ebc' => $this->ebc,
             'amount' => $this->amount,
-            'expiration_date' => $this->expiration_date,
+            'expiration_date' => $this->expiration_date->format('Y-m-d'),
         ];
     }
 }
