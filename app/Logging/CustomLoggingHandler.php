@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Logging;
 
-use App\Exceptions\Auth\UnauthorizedException;
 use App\Models\UserLogs;
 use Illuminate\Support\Facades\Auth;
 use Monolog\Handler\AbstractProcessingHandler;
@@ -22,9 +21,6 @@ class CustomLoggingHandler extends AbstractProcessingHandler
         parent::__construct($level, $bubble);
     }
 
-    /**
-     * @throws UnauthorizedException
-     */
     protected function write(array $record): void
     {
         if (!Auth::check() && $this->checkLogContext($record)) {

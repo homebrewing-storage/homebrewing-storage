@@ -18,6 +18,6 @@ class ChangePasswordController extends Controller implements ChangePasswordInter
         $user = $request->user();
         $password = $request->input('password_new');
         $service->update($user, $password);
-        return response()->json(Response::HTTP_CREATED);
+        return response()->json(['message' => __('passwords.change')], Response::HTTP_CREATED);
     }
 }

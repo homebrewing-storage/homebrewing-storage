@@ -19,8 +19,7 @@ class ChangePasswordService
 
     public function update(User $user, string $password): void
     {
-        $user->password = $this->hash->make($password);
-        $user->save();
+        $user->update(['password' => $this->hash->make($password)]);
         event(new PasswordChangeEvent("Password change"));
     }
 }

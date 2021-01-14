@@ -19,8 +19,7 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule): void
     {
-        $users = new User();
-        $users = $users->all();
+        $users = User::all();
         while (true) {
             foreach ($users as $user) {
                 $this->checkUserIngredients($user);
