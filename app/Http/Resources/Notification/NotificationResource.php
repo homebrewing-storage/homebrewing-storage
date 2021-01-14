@@ -13,6 +13,7 @@ class NotificationResource extends JsonResource
         return [
             'uuid' => $this->id,
             'data' => $this->data,
+            'read_at' => $this->read_at,
         ];
     }
 }

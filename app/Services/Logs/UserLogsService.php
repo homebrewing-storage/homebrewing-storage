@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Services\Logs;
 
 use App\Models\User;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserLogsService
 {
-    public function getUserLogs(User $user): LengthAwarePaginator
+    public function getUserLogs(User $user): Collection
     {
-        return $user->logs()->paginate(30);
+        return $user->logs;
     }
 }

@@ -79,9 +79,10 @@ $router->middleware(['auth:sanctum', 'verified'])->group(function (Router $route
     $router->delete('extras/{extra}', [ExtraController::class, 'destroy']);
 
     $router->get('notifications', [IngredientExpirationController::class, 'index']);
-    $router->get('unreadNotifications', [IngredientExpirationController::class, 'show']);
+    $router->get('unread-Notifications', [IngredientExpirationController::class, 'getUnread']);
+    $router->get('number-Of-Unread-Notifications', [IngredientExpirationController::class, 'getNumberOfUnread']);
+    $router->put('notifications/{notification}', [IngredientExpirationController::class, 'read']);
     $router->delete('notifications/{notification}', [IngredientExpirationController::class, 'destroy']);
-    $router->put('notifications/{notification}', [IngredientExpirationController::class, 'update']);
 
     $router->put('settings', [UserSettingsController::class, 'update']);
     $router->get('settings', [UserSettingsController::class, 'show']);

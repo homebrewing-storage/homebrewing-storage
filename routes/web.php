@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\SocialiteAuthController;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Routing\Router;
 
-Route::view('/', 'welcome');
+$router = app(Router::class);
+
+$router->view('/', 'welcome');
 
 //GitHub
-Route::get('/login/github', [SocialiteAuthController::class, 'redirectToGithub']);
-Route::get('/login/github/callback', [SocialiteAuthController::class, 'callbackToGithub']);
+$router->get('/login/github', [SocialiteAuthController::class, 'redirectToGithub']);
+$router->get('/login/github/callback', [SocialiteAuthController::class, 'callbackToGithub']);
 
 //Facebook
-Route::get('/login/facebook', [SocialiteAuthController::class, 'redirectToFacebook']);
-Route::get('/login/facebook/callback', [SocialiteAuthController::class, 'callbackToFacebook']);
+$router->get('/login/facebook', [SocialiteAuthController::class, 'redirectToFacebook']);
+$router->get('/login/facebook/callback', [SocialiteAuthController::class, 'callbackToFacebook']);
 
 //Email Verification
-Route::middleware('auth:sanctum')->prefix('/email')->group(function (): void {
-    Route::get('/verify/{id}/{hash}', [EmailVerificationController::class, 'accept'])
+$router->middleware('auth:sanctum')->prefix('/email')->group(function (Router $router): void {
+    $router->get('/verify/{id}/{hash}', [EmailVerificationController::class, 'accept'])
         ->middleware('signed')
         ->name('verification.verify');
 });

@@ -31,8 +31,29 @@ interface IngredientExpirationInterface
 
     /**
      * @OA\Get(
+     *     path="/api/notifications",
+     *     operationId="getUnread",
+     *     tags={"Notifications"},
+     *     summary="Get all notifications of a user",
+     *     @OA\Response(
+     *     response=200,
+     *     description="Successful operation"
+     * ),
+     *     @OA\Response(
+     *     response=401,
+     *     description="Unauthenticated"
+     * ),
+     *      security={{ "apiAuth": {} }},
+     * )
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getUnread(Request $request): JsonResponse;
+
+    /**
+     * @OA\Get(
      *     path="/api/unreadNotifications",
-     *     operationId="show",
+     *     operationId="getNumberOfUnread",
      *     tags={"Notifications"},
      *     summary="Get all unread notifications of a user",
      *     @OA\Response(
@@ -48,7 +69,8 @@ interface IngredientExpirationInterface
      * @param Request $request
      * @return JsonResponse
      */
-    public function show(Request $request): JsonResponse;
+    public function getNumberOfUnread(Request $request): JsonResponse;
+
 
     /**
      * @OA\Delete(
@@ -74,7 +96,7 @@ interface IngredientExpirationInterface
     /**
      * @OA\Put(
      *     path="/api/notifications/{notification}",
-     *     operationId="update",
+     *     operationId="read",
      *     tags={"Notifications"},
      *     summary="Mark as read notification of a user",
      *     @OA\Response(
@@ -90,5 +112,5 @@ interface IngredientExpirationInterface
      * @param IngredientExpiration $notification
      * @return JsonResponse
      */
-    public function update(IngredientExpiration $notification): JsonResponse;
+    public function read(IngredientExpiration $notification): JsonResponse;
 }

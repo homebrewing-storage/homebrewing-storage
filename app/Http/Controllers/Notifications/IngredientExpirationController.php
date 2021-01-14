@@ -23,25 +23,31 @@ class IngredientExpirationController extends Controller implements IngredientExp
 
     public function index(Request $request): JsonResponse
     {
-        $notifications = $this->service->getNotifications($request->user());
+        $notifications = $this->service->getAll($request->user());
         return response()->json($notifications);
     }
 
-    public function show(Request $request): JsonResponse
+    public function getUnread(Request $request): JsonResponse
     {
-        $unreadCount = $this->service->getUnread($request->user());
-        return response()->json($unreadCount);
+        $notifications = $this->service->getUnread($request->user());
+        return response()->json($notifications);
+    }
+
+    public function getNumberOfUnread(Request $request): JsonResponse
+    {
+        $unreadCount = $this->service->getNumberOfUnread($request->user());
+        return response()->json(['number' => $unreadCount]);
     }
 
     public function destroy(IngredientExpiration $notification): JsonResponse
     {
-        $this->service->deleteNotification($notification);
+        $this->service->delete($notification);
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function update(IngredientExpiration $notification): JsonResponse
+    public function read(IngredientExpiration $notification): JsonResponse
     {
-        $this->service->readNotifications($notification);
+        $this->service->read($notification);
         return response()->json(null, Response::HTTP_CREATED);
     }
 }
