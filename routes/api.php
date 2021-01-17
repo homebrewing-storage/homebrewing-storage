@@ -6,6 +6,7 @@ use App\Http\Controllers\User\Credentials\ChangePasswordController;
 use App\Http\Controllers\User\Settings\UserSettingsController;
 use App\Http\Controllers\Notifications\IngredientExpirationController;
 use App\Http\Controllers\Logs\UserLogsController;
+use App\Http\Controllers\User\UserDataController;
 use App\Http\Controllers\Auth\{
     AuthenticationController,
     EmailVerificationController,
@@ -46,9 +47,9 @@ $router->middleware('guest')->group(function (Router $router): void {
 
 // Authorization
 $router->middleware(['auth:sanctum', 'verified'])->group(function (Router $router): void {
-    $router->get('user', function (Request $request) {
-        return $request->user();
-    });
+
+    //User's data
+    $router->get('user', [UserDataController::class, 'show']);
 
     //Ingredients
     $router->apiResource('hops', HopController::class);
