@@ -31,7 +31,7 @@ interface IngredientExpirationInterface
 
     /**
      * @OA\Get(
-     *     path="/api/notifications",
+     *     path="/api/unread-Notifications",
      *     operationId="getUnread",
      *     tags={"Notifications"},
      *     summary="Get all notifications of a user",

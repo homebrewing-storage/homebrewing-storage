@@ -831,13 +831,35 @@
                 ]
             }
         },
+        "/api/unread-Notifications": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Get all notifications of a user",
+                "operationId": "getUnread",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
         "/api/unreadNotifications": {
             "get": {
                 "tags": [
                     "Notifications"
                 ],
                 "summary": "Get all unread notifications of a user",
-                "operationId": "show",
+                "operationId": "getNumberOfUnread",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -859,7 +881,7 @@
                     "Notifications"
                 ],
                 "summary": "Mark as read notification of a user",
-                "operationId": "update",
+                "operationId": "read",
                 "responses": {
                     "201": {
                         "description": "Successful operation"
@@ -966,6 +988,29 @@
                 },
                 "responses": {
                     "201": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "User's data"
+                ],
+                "summary": "Fetches user's data",
+                "description": "Fetches user's data",
+                "operationId": "show",
+                "responses": {
+                    "200": {
                         "description": "Successful operation"
                     },
                     "401": {
