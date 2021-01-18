@@ -91,26 +91,4 @@ class LoginTest extends TestCase
 
     }
 
-    public function test_Unauthenticated_Users_Try_To_Get_ApiHops()
-    {
-        $this->expectException(UnauthorizedException::class);
-        $response = $this->get('/api/hops');
-    }
-
-
-    public function test_Authenticated_Users_Try_To_Get_ApiHops()
-    {
-
-        $user = $this->createUser('sydney99@example.org');
-
-        $response = $this->get('api/hops', $this->headers($user));
-
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                    'data',
-                    'pagination'
-
-                ]
-            );
-    }
 }

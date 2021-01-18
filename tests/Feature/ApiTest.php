@@ -140,4 +140,46 @@ class ApiTest extends TestCase
                 ]
             );
     }
+
+    public function test_Unauthenticated_User_Try_To_Get_Notifications()
+    {
+        $this->expectException(UnauthorizedException::class);
+        $response = $this->get('/api/notifications');
+    }
+
+
+    public function test_Authenticated_User_Try_To_Get_Notifications()
+    {
+        $user = $this->createUser('sydney99@example.org');
+        $response = $this->get('api/notifications', $this->headers($user));
+        $response->assertStatus(200);
+    }
+
+    public function test_Unauthenticated_User_Try_To_Get_UnreadNotifications()
+    {
+        $this->expectException(UnauthorizedException::class);
+        $response = $this->get('/api/unreadNotifications');
+    }
+
+
+    public function test_Authenticated_User_Try_To_Get_UnreadNotifications()
+    {
+        $user = $this->createUser('sydney99@example.org');
+        $response = $this->get('api/unreadNotifications', $this->headers($user));
+        $response->assertStatus(200);
+    }
+
+    public function test_Unauthenticated_User_Try_To_Get_Settings()
+    {
+        $this->expectException(UnauthorizedException::class);
+        $response = $this->get('/api/settings');
+    }
+
+
+    public function test_Authenticated_User_Try_To_Get_Settings()
+    {
+        $user = $this->createUser('sydney99@example.org');
+        $response = $this->get('api/settings', $this->headers($user));
+        $response->assertStatus(200);
+    }
 }
