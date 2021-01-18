@@ -12,14 +12,12 @@ use App\Http\Controllers\Auth\{
     EmailVerificationController,
     ResetPasswordController
 };
-
 use App\Http\Controllers\Ingredients\{
     HopController,
     YeastController,
     FermentableController,
     ExtraController
 };
-use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 
 $router = app(Router::class);
