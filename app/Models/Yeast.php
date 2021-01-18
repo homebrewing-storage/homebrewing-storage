@@ -11,6 +11,8 @@ class Yeast extends Ingredient
 {
     use HasFactory;
 
+    protected string $type = "Yeast";
+
     protected $fillable = [
         'user_id',
         'type_id',

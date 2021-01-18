@@ -4,82 +4,38 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\Auth\LogoutAuthEvent;
 use App\Exceptions\Auth\UnauthorizedException;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Contracts\AuthenticationInterface;
 use App\Http\Requests\Auth\LoginUserRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
-use App\Services\AuthenticationServices;
+use App\Services\Auth\LoginService;
+use App\Services\Auth\RegisterService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Laravel\Socialite\Facades\Socialite;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthenticationController extends Controller
+class AuthenticationController extends BaseAuthController implements AuthenticationInterface
 {
-    public function register(RegisterUserRequest $request, AuthenticationServices $authenticationServices): JsonResponse
+    public function register(RegisterUserRequest $request, RegisterService $service): JsonResponse
     {
-        $data = $request->only('name', 'surname', 'email', 'password');
-        $token = $authenticationServices->register($data);
-        return response()->json([
-            'message' => 'User registered. Sending The Verification Email',
-            'token' => $token,
-        ], Response::HTTP_CREATED);
+        $token = $service->register($request->validated());
+        return $this->responseJson(__('auth.register'), $token, Response::HTTP_CREATED);
     }
 
     /**
-     * @param LoginUserRequest $request
-     * @param AuthenticationServices $authenticationServices
-     * @return JsonResponse
      * @throws UnauthorizedException
      */
-    public function login(LoginUserRequest $request, AuthenticationServices $authenticationServices): JsonResponse
+    public function login(LoginUserRequest $request, LoginService $service): JsonResponse
     {
-        $formCredentials = $request->only('email', 'password');
-        $token = $authenticationServices->login($formCredentials);
-
-        $userId = $authenticationServices->getUserId($formCredentials['email']);
-
-        Log::channel('database')->info("Successfully logged in.", [
-            "Auth", "Log", $userId, " ", " ", "Success"
-        ]);
-
-        return response()->json(['token' => $token]);
+        $token = $service->login($request->validated());
+        return $this->responseJson(__('auth.success'), $token);
     }
 
-    public function logout(Request $request, AuthenticationServices $authenticationServices): void
+    public function logout(Request $request): void
     {
-        $userId = Auth::user()->id;
-        Log::channel('database')->info("Successfully logged out.", [
-            "Auth", "Log", $userId, " ", " ", "Success"
-        ]);
-
-        $authenticationServices->logout($request);
-    }
-
-    public function redirectToGithub(): RedirectResponse
-    {
-        return Socialite::driver('github')->redirect();
-    }
-
-    public function callbackToGithub(AuthenticationServices $authenticationServices): JsonResponse
-    {
-        $user = Socialite::driver('github')->stateless()->user();
-        $token = $authenticationServices->loginSocialMedia($user, 'github');
-        return response()->json(['token' => $token]);
-    }
-
-    public function redirectToFacebook(): RedirectResponse
-    {
-        return Socialite::driver('facebook')->redirect();
-    }
-
-    public function callbackToFacebook(AuthenticationServices $authenticationServices): JsonResponse
-    {
-        $user = Socialite::driver('facebook')->stateless()->user();
-        $token = $authenticationServices->loginSocialMedia($user, 'facebook');
-        return response()->json(['token' => $token]);
+        $user = $request->user();
+        event(new LogoutAuthEvent($user));
+        $user->currentAccessToken()->delete();
     }
 }

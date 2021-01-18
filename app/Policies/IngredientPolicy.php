@@ -9,8 +9,8 @@ use App\Models\User;
 
 class IngredientPolicy
 {
-    public function check(User $user, Ingredient $extra): bool
+    public function check(User $user, Ingredient $ingredient): bool
     {
-        return $user->id === $extra->user_id;
+        return $ingredient->user()->is($user);
     }
 }

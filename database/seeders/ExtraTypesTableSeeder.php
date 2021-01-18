@@ -12,10 +12,12 @@ class ExtraTypesTableSeeder extends Seeder
     public function run(): void
     {
         $extraTypes = [
-            'type_1',
-            'type_2',
-            'type_3',
-            'type_4',
+            'Spices',
+            'Clarification',
+            'Water factor',
+            'Herb',
+            'Flavoring',
+            'Other'
         ];
 
         foreach ($extraTypes as $extraType) {

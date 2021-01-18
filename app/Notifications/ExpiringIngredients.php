@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
+use App\Models\UserSettings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 
 class ExpiringIngredients extends Notification
 {
@@ -16,7 +18,7 @@ class ExpiringIngredients extends Notification
     protected $ingredientsDate;
     protected $userSettings;
 
-    public function __construct($ingredientsName, $ingredientsDate, $userSettings)
+    public function __construct(string $ingredientsName, string $ingredientsDate, UserSettings $userSettings)
     {
         $this->ingredientsName = $ingredientsName;
         $this->ingredientsDate = $ingredientsDate;
@@ -34,9 +36,12 @@ class ExpiringIngredients extends Notification
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+            ->line('Your ingredient ')
+            ->line(new HtmlString('<strong>' . $this->ingredientsName . '</strong>'))
+            ->line(' is expiring.')
+            ->line(new HtmlString('It will expire on ' . '<strong>' . $this->ingredientsDate . '</strong>'))
+            ->action('Go to the homepage', url('/'))
+            ->line('Thank you for using our storage!');
     }
 
     public function toDatabase($notifiable): array

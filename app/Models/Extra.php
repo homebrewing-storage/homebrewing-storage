@@ -11,6 +11,8 @@ class Extra extends Ingredient
 {
     use HasFactory;
 
+    protected string $type = "Extra";
+
     protected $fillable = [
         'user_id',
         'type_id',

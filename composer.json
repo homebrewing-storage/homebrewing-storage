@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.4.11",
+        "darkaonline/l5-swagger": "^8.0",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -45,6 +46,9 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
+        },
+        "psr-0": {
+            "Contracts": "app/"
         }
     },
     "minimum-stability": "dev",

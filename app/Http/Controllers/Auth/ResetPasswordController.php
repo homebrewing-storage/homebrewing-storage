@@ -4,30 +4,36 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Contracts\ResetPasswordInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\EmailRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
-use App\Services\ResetPasswordServices;
+use App\Services\Auth\ResetPasswordServices;
 use Illuminate\Http\JsonResponse;
 
-class ResetPasswordController extends Controller
+class ResetPasswordController extends Controller implements ResetPasswordInterface
 {
-    public function forgotPassword(EmailRequest $request, ResetPasswordServices $resetPasswordServices): JsonResponse
+    private ResetPasswordServices $service;
+
+    public function __construct(ResetPasswordServices $service)
     {
-        $email = $request->only('email');
-        $message = $resetPasswordServices->sendResetLink($email);
+        $this->service = $service;
+    }
+
+    public function forgotPassword(EmailRequest $request): JsonResponse
+    {
+        $message = $this->service->sendResetLink($request->validated());
         return response()->json($message);
     }
 
-    public function getToken($token): JsonResponse
+    public function getToken(string $token): JsonResponse
     {
         return response()->json(['token' => $token]);
     }
 
-    public function resetPassword(ResetPasswordRequest $request, ResetPasswordServices $resetPasswordServices): JsonResponse
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
     {
-        $data = $request->only('email', 'password', 'password_confirmation', 'token');
-        $message = $resetPasswordServices->resetPassword($data, $request);
+        $message = $this->service->resetPassword($request->validated(), $request);
         return response()->json($message);
     }
 }
