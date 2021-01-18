@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Ingredients;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Ingredients\YeastFormRequest;
-use App\Http\Resources\TypeResource;
+use App\Http\Controllers\Contracts\YeastInterface;
+use App\Http\Requests\Ingredients\YeastRequest;
+use App\Http\Resources\IngredientType\TypeResource;
 use App\Http\Resources\Yeast\YeastCollectionResource;
 use App\Http\Resources\Yeast\YeastResource;
 use App\Models\Yeast;
 use App\Models\YeastType;
+use App\Services\Ingredient\IngredientService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
-class YeastController extends Controller
+class YeastController extends BaseIngredientController implements YeastInterface
 {
-    public function __construct()
+    public function __construct(IngredientService $service)
     {
+        parent::__construct($service);
         $this->middleware('can:check,yeast')->only(['show', 'update', 'destroy']);
     }
 
@@ -28,22 +28,14 @@ class YeastController extends Controller
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $yeastsPaginate = $request->user()->yeasts()->paginate($perPage, ['*'], 'page', $page);
+        $relation = $request->user()->yeasts();
+        $yeastsPaginate = $this->service->paginate($relation, (int)$perPage, (int)$page);
         return response()->json(new YeastCollectionResource($yeastsPaginate));
     }
 
-    public function store(YeastFormRequest $request): JsonResponse
+    public function store(YeastRequest $request): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
-        $userId = $request->user()->id;
-        $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
-        $yeast = new Yeast($dataRequest);
-        $yeast->save();
-
-        Log::channel('database')->info("Successfully added new ingredient.", [
-            "Ingredient", "Added ingredient", "Yeast", $dataRequest['name'], "Success"
-        ]);
-
+        $yeast = $this->service->create($request->user()->yeasts(), $request->validated());
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
     }
 
@@ -52,36 +44,20 @@ class YeastController extends Controller
         return response()->json(new YeastResource($yeast));
     }
 
-    public function update(YeastFormRequest $request, Yeast $yeast): JsonResponse
+    public function update(YeastRequest $request, Yeast $yeast): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
-        $yeast->update($dataRequest);
-
-        Log::channel('database')->info("Successfully updated new ingredient.", [
-            "Ingredient", "Updated ingredient", "Yeast", $dataRequest['name'], "Success"
-        ]);
-
+        $yeast->update($request->validated());
         return response()->json(new YeastResource($yeast), Response::HTTP_CREATED);
     }
 
     public function destroy(Yeast $yeast): JsonResponse
     {
         $yeast->delete();
-
-        Log::channel('database')->info("Successfully deleted ingredient.", [
-            "Ingredient", "Deleted ingredient", "Yeast", $yeast['name'], "Success"
-        ]);
-
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
     public function types(): JsonResponse
     {
         return response()->json(TypeResource::collection(YeastType::all()));
-    }
-
-    private function getDataRequest(Request $request): array
-    {
-        return $request->only('name', 'type_id', 'amount', 'expiration_date');
     }
 }

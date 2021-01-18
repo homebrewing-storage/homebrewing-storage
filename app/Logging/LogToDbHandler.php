@@ -8,14 +8,12 @@ use Monolog\Logger;
 
 class LogToDbHandler
 {
-    public function __invoke(array $config)
+    public function __invoke(array $config): Logger
     {
-        $processors = [];
-
         return new Logger(
             $config['name'],
-            [new CustomLoggingHandler($config, $processors)],
-            $processors
+            [new CustomLoggingHandler($config, [])],
+            []
         );
     }
 }

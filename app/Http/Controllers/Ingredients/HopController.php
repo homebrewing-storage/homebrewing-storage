@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Ingredients;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Ingredients\HopFormRequest;
+use App\Http\Controllers\Contracts\HopInterface;
+use App\Http\Requests\Ingredients\HopRequest;
 use App\Http\Resources\Hop\HopCollectionResource;
 use App\Http\Resources\Hop\HopResource;
 use App\Models\Hop;
+use App\Services\Ingredient\IngredientService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
-class HopController extends Controller
+class HopController extends BaseIngredientController implements HopInterface
 {
-    public function __construct()
+    public function __construct(IngredientService $service)
     {
+        parent::__construct($service);
         $this->middleware('can:check,hop')->only(['show', 'update', 'destroy']);
     }
 
@@ -26,22 +26,14 @@ class HopController extends Controller
     {
         $perPage = $request->query('perPage', 30);
         $page = $request->query('page', 1);
-        $hopsPaginate = $request->user()->hops()->paginate($perPage, ['*'], 'page', $page);
+        $relation = $request->user()->hops();
+        $hopsPaginate = $this->service->paginate($relation, (int)$perPage, (int)$page);
         return response()->json(new HopCollectionResource($hopsPaginate));
     }
 
-    public function store(HopFormRequest $request): JsonResponse
+    public function store(HopRequest $request): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
-        $userId = $request->user()->id;
-        $dataRequest = Arr::add($dataRequest, 'user_id', $userId);
-        $hop = new Hop($dataRequest);
-        $hop->save();
-
-        Log::channel('database')->info("Successfully added new ingredient.", [
-            "Ingredient", "Added ingredient", "Hop", $dataRequest['name'], "Success"
-        ]);
-
+        $hop = $this->service->create($request->user()->hops(), $request->validated());
         return response()->json(new HopResource($hop), Response::HTTP_CREATED);
     }
 
@@ -50,31 +42,15 @@ class HopController extends Controller
         return response()->json(new HopResource($hop));
     }
 
-    public function update(HopFormRequest $request, Hop $hop): JsonResponse
+    public function update(HopRequest $request, Hop $hop): JsonResponse
     {
-        $dataRequest = $this->getDataRequest($request);
-        $hop->update($dataRequest);
-
-        Log::channel('database')->info("Successfully updated new ingredient.", [
-            "Ingredient", "Updated ingredient", "Hop", $dataRequest['name'], "Success"
-        ]);
-
+        $hop->update($request->validated());
         return response()->json(new HopResource($hop), Response::HTTP_CREATED);
     }
 
     public function destroy(Hop $hop): JsonResponse
     {
         $hop->delete();
-
-        Log::channel('database')->info("Successfully deleted ingredient.", [
-            "Ingredient", "Deleted ingredient", "Hop", $hop['name'], "Success"
-        ]);
-
         return response()->json(null, Response::HTTP_NO_CONTENT);
-    }
-
-    private function getDataRequest(Request $request): array
-    {
-        return $request->only('name', 'amount', 'alpha_acid', 'expiration_date');
     }
 }

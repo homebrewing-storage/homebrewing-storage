@@ -11,6 +11,6 @@ class UserSettingsSeeder extends Seeder
 {
     public function run(): void
     {
-        UserSettings::factory()->count(1)->create();
+        UserSettings::factory()->create();
     }
 }
