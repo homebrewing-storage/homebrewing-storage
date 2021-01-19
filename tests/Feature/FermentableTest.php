@@ -115,7 +115,7 @@ class FermentableTest extends TestCase
                 'yield' =>'1',
                 'ebc'=> '1',
                 'amount' => '1',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
 
 
             ])
@@ -125,7 +125,7 @@ class FermentableTest extends TestCase
                 'yield' =>'2',
                 'ebc'=> '2',
                 'amount' => '2',
-                'expiration_date' => '2008-05-12T00:00:00.000000Z',
+                'expiration_date' => '2008-05-12',
             ]);
 
     }
@@ -147,7 +147,7 @@ class FermentableTest extends TestCase
                 'yield' =>'1',
                 'ebc'=> '1',
                 'amount' => '1',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
 
 
             ])
@@ -157,7 +157,7 @@ class FermentableTest extends TestCase
                 'yield' =>'2',
                 'ebc'=> '2',
                 'amount' => '2',
-                'expiration_date' => '2008-05-12T00:00:00.000000Z',
+                'expiration_date' => '2008-05-12',
             ]);
 
     }
@@ -169,7 +169,7 @@ class FermentableTest extends TestCase
         $fermentableType= $this->createFermentableType();
 
 
-        $Data = ['type_id' =>$fermentableType->id, 'name'=>'name3', 'yield' =>'3','ebc' =>'3',  'amount'=>'3', 'expiration_date'=> '2009-05-12T00:00:00.000000Z'];
+        $Data = ['type_id' =>$fermentableType->id, 'name'=>'name3', 'yield' =>'3','ebc' =>'3',  'amount'=>'3', 'expiration_date'=> '2009-05-12'];
 
         $this->json('POST', 'api/fermentables', $Data,$this->headers($user))
             ->assertStatus(201)
@@ -178,7 +178,7 @@ class FermentableTest extends TestCase
                 'yield' =>'3',
                 'ebc' =>'3',
                 'amount' => '3',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ]);
     }
 
@@ -190,7 +190,7 @@ class FermentableTest extends TestCase
         $fermentableType= $this->createFermentableType();
 
 
-        $Data = ['type_id' =>$fermentableType->id, 'name'=>'name3', 'yield' =>'3','ebc' =>'3',  'amount'=>'3', 'expiration_date'=> '2009-05-12T00:00:00.000000Z'];
+        $Data = ['type_id' =>$fermentableType->id, 'name'=>'name3', 'yield' =>'3','ebc' =>'3',  'amount'=>'3', 'expiration_date'=> '2009-05-12'];
 
         $this->json('POST', 'api/fermentables', $Data,$this->headers($user))
             ->assertStatus(201)
@@ -199,7 +199,7 @@ class FermentableTest extends TestCase
                 'yield' =>'3',
                 'ebc' =>'3',
                 'amount' => 'dupa',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ]);
     }
 

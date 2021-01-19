@@ -45,7 +45,7 @@ class HopTest extends TestCase
             'name' => 'name1',
             'amount' => '1',
             'alpha_acid' => '1',
-            'expiration_date' => '2009-05-12T00:00:00.000000Z',
+            'expiration_date' => '2009-05-12',
         ]);
         return $hop;
     }
@@ -57,7 +57,7 @@ class HopTest extends TestCase
             'name' => 'name2',
             'amount' => '2',
             'alpha_acid' => '2',
-            'expiration_date' => '2008-05-12T00:00:00.000000Z',
+            'expiration_date' => '2008-05-12',
         ]);
         return $hop;
     }
@@ -93,13 +93,13 @@ class HopTest extends TestCase
                 'name' => 'name1',
                 'amount' => '1',
                 'alpha_acid' => '1',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ])
             ->assertJsonFragment([
                 'name' => 'name2',
                 'amount' => '2',
                 'alpha_acid' => '2',
-                'expiration_date' => '2008-05-12T00:00:00.000000Z',
+                'expiration_date' => '2008-05-12',
             ]);
 
     }
@@ -118,13 +118,13 @@ class HopTest extends TestCase
                 'name' => 'dupa',
                 'amount' => '2',
                 'alpha_acid' => '2',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ])
             ->assertJsonFragment([
                 'name' => 'name2',
                 'amount' => '3',
                 'alpha_acid' => '3',
-                'expiration_date' => '2008-05-12T00:00:00.000000Z',
+                'expiration_date' => '2008-05-12',
             ]);
 
     }
@@ -134,7 +134,7 @@ class HopTest extends TestCase
 
         $user = $this->createUser('sydney99@example.org');
 
-        $Data = ['name' => 'name3', 'amount' => '3', 'alpha_acid' => '3', 'expiration_date' => '2009-05-12T00:00:00.000000Z'];
+        $Data = ['name' => 'name3', 'amount' => '3', 'alpha_acid' => '3', 'expiration_date' => '2009-05-12'];
 
         $this->json('POST', 'api/hops', $Data, $this->headers($user))
             ->assertStatus(201)
@@ -142,7 +142,7 @@ class HopTest extends TestCase
                 'name' => 'name3',
                 'amount' => '3',
                 'alpha_acid' => '3',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ]);
 
 
@@ -153,14 +153,14 @@ class HopTest extends TestCase
 
         $user = $this->createUser('sydney99@example.org');
 
-        $Data = ['name' => 'name3', 'amount' => '3', 'alpha_acid' => '3', 'expiration_date' => '2009-05-12T00:00:00.000000Z'];
+        $Data = ['name' => 'name3', 'amount' => '3', 'alpha_acid' => '3', 'expiration_date' => '2009-05-12'];
 
         $this->json('POST', 'api/hops', $Data, $this->headers($user))
             ->assertJsonFragment([
                 'name' => 'name3',
                 'amount' => '3',
                 'alpha_acid' => '43',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ]);
 
 

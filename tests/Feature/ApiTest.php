@@ -51,8 +51,9 @@ class ApiTest extends TestCase
 
     public function test_Unauthenticated_User_Try_To_Get_Hops()
     {
-        $this->expectException(UnauthorizedException::class);
-        $response = $this->get('/api/hops');
+        $response = $this->get('/api/hops')
+            ->assertStatus(401);
+
     }
 
 
@@ -74,8 +75,8 @@ class ApiTest extends TestCase
 
     public function test_Unauthenticated_User_Try_To_Get_Fermentables()
     {
-        $this->expectException(UnauthorizedException::class);
-        $response = $this->get('/api/fermentables');
+        $response = $this->get('/api/fermentables')
+            ->assertStatus(401);
     }
 
 
@@ -97,8 +98,8 @@ class ApiTest extends TestCase
 
     public function test_Unauthenticated_User_Try_To_Get_Extras()
     {
-        $this->expectException(UnauthorizedException::class);
-        $response = $this->get('/api/extras');
+        $response = $this->get('/api/extras')
+            ->assertStatus(401);
     }
 
 
@@ -120,8 +121,9 @@ class ApiTest extends TestCase
 
     public function test_Unauthenticated_User_Try_To_Get_Yeasts()
     {
-        $this->expectException(UnauthorizedException::class);
-        $response = $this->get('/api/yeasts');
+        $response = $this->get('/api/yeasts')
+            ->assertStatus(401);
+
     }
 
 
@@ -143,8 +145,8 @@ class ApiTest extends TestCase
 
     public function test_Unauthenticated_User_Try_To_Get_Notifications()
     {
-        $this->expectException(UnauthorizedException::class);
-        $response = $this->get('/api/notifications');
+        $response = $this->get('/api/notifications')
+            ->assertStatus(401);
     }
 
 
@@ -157,22 +159,36 @@ class ApiTest extends TestCase
 
     public function test_Unauthenticated_User_Try_To_Get_UnreadNotifications()
     {
-        $this->expectException(UnauthorizedException::class);
-        $response = $this->get('/api/unreadNotifications');
+        $response = $this->get('/api/unread-Notifications')
+            ->assertStatus(401);
     }
 
 
     public function test_Authenticated_User_Try_To_Get_UnreadNotifications()
     {
         $user = $this->createUser('sydney99@example.org');
-        $response = $this->get('api/unreadNotifications', $this->headers($user));
+        $response = $this->get('api/unread-Notifications', $this->headers($user));
+        $response->assertStatus(200);
+    }
+
+    public function test_Unauthenticated_User_Try_To_Get_NumberOfUnreadNotifications()
+    {
+        $response = $this->get('/api/number-Of-Unread-Notifications')
+            ->assertStatus(401);
+    }
+
+
+    public function test_Authenticated_User_Try_To_Get_NumberOfUnreadNotifications()
+    {
+        $user = $this->createUser('sydney99@example.org');
+        $response = $this->get('api/number-Of-Unread-Notifications', $this->headers($user));
         $response->assertStatus(200);
     }
 
     public function test_Unauthenticated_User_Try_To_Get_Settings()
     {
-        $this->expectException(UnauthorizedException::class);
-        $response = $this->get('/api/settings');
+        $response = $this->get('/api/settings')
+            ->assertStatus(401);
     }
 
 
