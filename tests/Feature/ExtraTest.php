@@ -56,7 +56,7 @@ class ExtraTest extends TestCase
             'type_id' => $extraType->id,
             'name' => 'name1',
             'amount' => '1',
-            'expiration_date' => '2009-05-12T00:00:00.000000Z',
+            'expiration_date' => '2009-05-12',
 
         ]);
         return $extra;
@@ -69,7 +69,7 @@ class ExtraTest extends TestCase
             'type_id' => $extraType->id,
             'name' => 'name2',
             'amount' => '2',
-            'expiration_date' => '2008-05-12T00:00:00.000000Z',
+            'expiration_date' => '2008-05-12',
 
         ]);
         return $extra;
@@ -106,12 +106,12 @@ class ExtraTest extends TestCase
             ->assertJsonFragment([
                 'name' => 'name1',
                 'amount' => '1',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ])
             ->assertJsonFragment([
                 'name' => 'name2',
                 'amount' => '2',
-                'expiration_date' => '2008-05-12T00:00:00.000000Z',
+                'expiration_date' => '2008-05-12',
             ]);
 
     }
@@ -129,12 +129,12 @@ class ExtraTest extends TestCase
             ->assertJsonFragment([
                 'name' => 'name1',
                 'amount' => '1',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ])
             ->assertJsonFragment([
                 'name' => 'name2',
                 'amount' => 'dupa22',
-                'expiration_date' => '2008-05-12T00:00:00.000000Z',
+                'expiration_date' => '2008-05-12',
             ]);
 
     }
@@ -146,14 +146,14 @@ class ExtraTest extends TestCase
         $extraType = $this->createExtraType();
 
 
-        $Data = ['type_id' =>$extraType->id, 'name'=>'name3', 'amount'=>'3', 'expiration_date'=> '2009-05-12T00:00:00.000000Z'];
+        $Data = ['type_id' =>$extraType->id, 'name'=>'name3', 'amount'=>'3', 'expiration_date'=> '2009-05-12'];
 
         $this->json('POST', 'api/extras', $Data,$this->headers($user))
             ->assertStatus(201)
             ->assertJsonFragment([
                 'name' => 'name3',
                 'amount' => '3',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ]);
     }
 
@@ -164,14 +164,14 @@ class ExtraTest extends TestCase
         $extraType = $this->createExtraType();
 
 
-        $Data = ['type_id' =>$extraType->id, 'name'=>'name3', 'amount'=>'3', 'expiration_date'=> '2009-05-12T00:00:00.000000Z'];
+        $Data = ['type_id' =>$extraType->id, 'name'=>'name3', 'amount'=>'3', 'expiration_date'=> '2009-05-12'];
 
         $this->json('POST', 'api/extras', $Data,$this->headers($user))
             ->assertStatus(201)
             ->assertJsonFragment([
                 'name' => 'name3',
                 'amount' => 'dupa',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ]);
     }
 }

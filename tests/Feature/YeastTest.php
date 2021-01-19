@@ -55,7 +55,7 @@ class YeastTest extends TestCase
             'type_id' => $yeastType->id,
             'name' => 'name1',
             'amount' => '1',
-            'expiration_date' => '2009-05-12T00:00:00.000000Z',
+            'expiration_date' => '2009-05-12',
         ]);
         return $yeast;
     }
@@ -67,7 +67,7 @@ class YeastTest extends TestCase
             'type_id' => $yeastType->id,
             'name' => 'name2',
             'amount' => '2',
-            'expiration_date' => '2008-05-12T00:00:00.000000Z',
+            'expiration_date' => '2008-05-12',
         ]);
         return $yeast;
     }
@@ -105,7 +105,7 @@ class YeastTest extends TestCase
                 'name' => 'name1',
                 'type' => 'Liquid',
                 'amount' => '1',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
 
 
             ])
@@ -113,7 +113,7 @@ class YeastTest extends TestCase
                 'name' => 'name2',
                 'type' => 'Liquid',
                 'amount' => '2',
-                'expiration_date' => '2008-05-12T00:00:00.000000Z',
+                'expiration_date' => '2008-05-12',
             ]);
 
     }
@@ -133,7 +133,7 @@ class YeastTest extends TestCase
                 'name' => 'name1',
                 'type' => 'Liquid',
                 'amount' => '1',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
 
 
             ])
@@ -141,7 +141,7 @@ class YeastTest extends TestCase
                 'name' => 'dupa',
                 'type' => 'Liquid',
                 'amount' => '2',
-                'expiration_date' => '2008-05-12T00:00:00.000000Z',
+                'expiration_date' => '2008-05-12',
             ]);
 
     }
@@ -153,7 +153,7 @@ class YeastTest extends TestCase
         $yeastType = $this->createYeastType();
 
 
-        $Data = ['type_id' =>$yeastType->id, 'name'=>'name3', 'type'=>'Liquid',  'amount'=>'3', 'expiration_date'=> '2009-05-12T00:00:00.000000Z'];
+        $Data = ['type_id' =>$yeastType->id, 'name'=>'name3', 'type'=>'Liquid',  'amount'=>'3', 'expiration_date'=> '2009-05-12'];
 
         $this->json('POST', 'api/yeasts', $Data,$this->headers($user))
             ->assertStatus(201)
@@ -161,7 +161,7 @@ class YeastTest extends TestCase
                 'name' => 'name3',
                 'type'=>'Liquid',
                 'amount' => '3',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ]);
     }
 
@@ -172,7 +172,7 @@ class YeastTest extends TestCase
         $yeastType = $this->createYeastType();
 
 
-        $Data = ['type_id' =>$yeastType->id, 'name'=>'name3', 'type'=>'Liquid',  'amount'=>'3', 'expiration_date'=> '2009-05-12T00:00:00.000000Z'];
+        $Data = ['type_id' =>$yeastType->id, 'name'=>'name3', 'type'=>'Liquid',  'amount'=>'3', 'expiration_date'=> '2009-05-12'];
 
         $this->json('POST', 'api/yeasts', $Data,$this->headers($user))
             ->assertStatus(201)
@@ -180,7 +180,7 @@ class YeastTest extends TestCase
                 'name' => 'name3',
                 'type'=>'dupa',
                 'amount' => '3',
-                'expiration_date' => '2009-05-12T00:00:00.000000Z',
+                'expiration_date' => '2009-05-12',
             ]);
     }
 

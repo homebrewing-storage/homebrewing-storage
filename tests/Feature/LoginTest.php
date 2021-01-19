@@ -78,7 +78,7 @@ class LoginTest extends TestCase
 
     public function test_User_Try_Login_With_Incorrect_Password()
     {
-        $this->expectException(UnauthorizedException::class);
+        //$this->expectException(UnauthorizedException::class);
 
         $user = User::factory()->create([
             'email' => 'sydney99@example.org',
@@ -87,8 +87,8 @@ class LoginTest extends TestCase
 
         $loginData = ['email' => 'sydney99@example.org', 'password' => 'password'];
 
-        $this->json('POST', 'api/login', $loginData, ['Accept' => 'application/json']);
-
+        $this->json('POST', 'api/login', $loginData, ['Accept' => 'application/json'])
+        ->assertStatus(401);
     }
 
 }
