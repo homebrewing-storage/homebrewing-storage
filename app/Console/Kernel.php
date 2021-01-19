@@ -19,18 +19,12 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule): void
     {
-        $users = User::all();
-        while (true) {
+        $schedule->call(function () {
+            $users = User::all();
             foreach ($users as $user) {
                 $this->checkUserIngredients($user);
             }
-            echo "Done" . PHP_EOL;
-            sleep(5);
-        }
-
-//        $schedule->call(function () {
-//            //
-//        })->daily();
+        })->daily();
     }
 
     protected function commands(): void
