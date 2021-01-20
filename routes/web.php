@@ -1,18 +1,26 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+declare(strict_types=1);
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\SocialiteAuthController;
+use Illuminate\Routing\Router;
 
-Route::get('/', function () {
-    return view('welcome');
+$router = app(Router::class);
+
+$router->view('/', 'welcome');
+
+//GitHub
+$router->get('login/github', [SocialiteAuthController::class, 'redirectToGithub']);
+$router->get('login/github/callback', [SocialiteAuthController::class, 'callbackToGithub']);
+
+//Facebook
+$router->get('login/facebook', [SocialiteAuthController::class, 'redirectToFacebook']);
+$router->get('login/facebook/callback', [SocialiteAuthController::class, 'callbackToFacebook']);
+
+//Email Verification
+$router->middleware('auth:sanctum')->prefix('email/')->group(function (Router $router): void {
+    $router->get('verify/{id}/{hash}', [EmailVerificationController::class, 'accept'])
+        ->middleware('signed')
+        ->name('verification.verify');
 });
